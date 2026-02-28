@@ -73,12 +73,12 @@
       
       <view class="form-item">
         <view class="label">濮撳悕 <text class="required">*</text></view>
-        <input type="text" placeholder="璇疯緭鍏ユ偍鐨勫鍚? bindinput="onNameInput" value="{{ name }}" />
+        <input type="text" placeholder="请输入您的姓名" bindinput="onNameInput" value="{{ name }}" />
       </view>
       
       <view class="form-item">
         <view class="label">鑱旂郴鐢佃瘽 <text class="required">*</text></view>
-        <input type="number" placeholder="璇疯緭鍏ユ偍鐨勮仈绯荤數璇? bindinput="onPhoneInput" value="{{ phone }}" />
+        <input type="number" placeholder="请输入您的联系电话" bindinput="onPhoneInput" value="{{ phone }}" />
       </view>
       
       <view class="form-item">
@@ -89,7 +89,7 @@
       
       <view class="form-item">
         <view class="label">鍙弬涓庢椂闂?/view>
-        <input type="text" placeholder="濡傦細鍛ㄦ湯銆佽妭鍋囨棩绛? bindinput="onTimeInput" value="{{ availableTime }}" />
+        <input type="text" placeholder="如：周末、节假日等" bindinput="onTimeInput" value="{{ availableTime }}" />
       </view>
       
       <view class="submit-btn" @tap="handleSubmit">鎻愪氦鐢宠</view>

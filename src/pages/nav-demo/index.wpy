@@ -31,24 +31,24 @@
 </style>
 
 <template>
-  <!-- 鍩虹瀵艰埅鏍?-->
+  <!-- 基础导航栏 -->
   <nav-bar 
-    title="鍩虹瀵艰埅鏍? 
+    title="基础导航栏" 
     @back="onBack"
     @right-tap="onRightTap">
   </nav-bar>
   
-  <!-- 鑷畾涔夊彸渚ф枃瀛?-->
+  <!-- 自定义右侧文字 -->
   <nav-bar 
-    title="鍙充晶鏂囧瓧" 
-    right-text="淇濆瓨"
+    title="右侧文字" 
+    right-text="保存"
     @right-tap="onSave"
     class="fixed">
   </nav-bar>
   
-  <!-- 鑷畾涔夊浘鏍?-->
+  <!-- 自定义图标 -->
   <nav-bar 
-    title="鑷畾涔夊浘鏍? 
+    title="自定义图标" 
     back-icon="/images/back-icon.png"
     right-icon="search"
     @right-tap="onSearch"
