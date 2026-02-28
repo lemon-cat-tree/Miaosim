@@ -13,15 +13,15 @@
       <!-- 个人信息 -->
       <view class="form-item">
         <text class="label">姓名</text>
-        <input class="input" name="name" placeholder="请输入姓名" required />
+        <input class="input" name="name" placeholder="请输入姓名" />
       </view>
       <view class="form-item">
         <text class="label">联系方式</text>
-        <input class="input" name="phone" type="number" placeholder="请输入手机号" required />
+        <input class="input" name="phone" type="number" placeholder="请输入手机号" />
       </view>
       <view class="form-item">
         <text class="label">居住地址</text>
-        <input class="input" name="address" placeholder="请输入详细居住地址" required />
+        <input class="input" name="address" placeholder="请输入详细居住地址" />
       </view>
       <!-- 领养说明 -->
       <view class="form-item">

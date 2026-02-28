@@ -24,6 +24,7 @@ export default class App extends wepy.app {
       'pages/home/index',
       'pages/mine/index',
       'pages/load/register/index',
+      'pages/load/login/index',
       'pages/rescue-info/list',
       'pages/rescue-info/publish',
       'pages/rescue-status/index',
