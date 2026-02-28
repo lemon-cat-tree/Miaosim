@@ -1,15 +1,13 @@
-﻿<script>
 import wepy from 'wepy'
 
 export default class App extends wepy.app {
   config = {
     pages: [
-      'pages/home/index',
-      'pages/mine/index'
+      'pages/home/index'
     ],
     window: {
       navigationBarBackgroundColor: '#ffffff',
-      navigationBarTitleText: '测试应用',
+      navigationBarTitleText: '测试',
       navigationBarTextStyle: 'black'
     }
   }
@@ -22,4 +20,3 @@ export default class App extends wepy.app {
     console.log('app launched')
   }
 }
-</script>

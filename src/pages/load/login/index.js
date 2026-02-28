@@ -1,4 +1,4 @@
-// index.js
+﻿// index.js
 Page({
     data: {
         username: '',

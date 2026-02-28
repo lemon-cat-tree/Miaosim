@@ -1,4 +1,4 @@
-// index.js
+﻿// index.js
 Page({
     data: {
         userRole: 'guest' // 默认角色
