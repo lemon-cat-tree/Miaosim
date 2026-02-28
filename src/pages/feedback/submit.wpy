@@ -1,0 +1,43 @@
+<template>
+  <!-- 统一导航栏 -->
+  <nav-bar title="页面标题" showBack="{{true}}"></nav-bar>
+  
+  <!-- 页面主体（按功能分块） -->
+  <view class="page-container">
+    <!-- 搜索/筛选区（可选） -->
+    <!-- 列表/表单区（核心） -->
+    <!-- 操作按钮区（底部/行内） -->
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import NavBar from '@/components/nav-bar/index'
+import { request } from '@/utils/request'
+import { checkPermission } from '@/utils/auth'
+
+export default class PageName extends wepy.page {
+  components = { NavBar }
+  data = { /* 页面数据 */ }
+  
+  onLoad() { 
+    // 权限校验
+    if (!checkPermission('/pages/xxx/xxx')) {
+      wepy.navigateBack()
+      return wepy.showToast({ title: '暂无权限', icon: 'none' })
+    }
+    // 初始化数据
+  }
+  
+  methods = { /* 交互方法 */ }
+}
+</script>
+
+<style lang="less" scoped>
+/* 统一配色：主色 #FF9E7D，辅助色 #66CC99，警告色 #ff6b6b */
+.page-container {
+  min-height: 100vh;
+  background: #f8f8f8;
+  padding: 20rpx;
+}
+</style>

@@ -1,0 +1,274 @@
+<style lang="less">
+.volunteer-manage-page {
+  padding: 30rpx;
+  background: #f8f8f8;
+  min-height: 100vh;
+  
+  .manage-header {
+    background: white;
+    padding: 30rpx;
+    border-radius: 10rpx;
+    margin-bottom: 30rpx;
+    box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.1);
+    
+    .title {
+      font-size: 36rpx;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20rpx;
+    }
+    
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      
+      .stat-item {
+        text-align: center;
+        
+        .count {
+          font-size: 40rpx;
+          font-weight: bold;
+          color: #1296db;
+        }
+        
+        .label {
+          font-size: 24rpx;
+          color: #666;
+          margin-top: 10rpx;
+        }
+      }
+    }
+  }
+  
+  .application-list {
+    .application-item {
+      background: white;
+      padding: 30rpx;
+      border-radius: 10rpx;
+      margin-bottom: 20rpx;
+      box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.1);
+      
+      .applicant-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20rpx;
+        
+        .avatar {
+          width: 80rpx;
+          height: 80rpx;
+          border-radius: 50%;
+          margin-right: 20rpx;
+        }
+        
+        .info-text {
+          flex: 1;
+          
+          .name {
+            font-size: 32rpx;
+            font-weight: bold;
+            color: #333;
+          }
+          
+          .time {
+            font-size: 24rpx;
+            color: #999;
+            margin-top: 5rpx;
+          }
+        }
+        
+        .status {
+          &.pending {
+            color: #ff9800;
+          }
+          &.approved {
+            color: #4caf50;
+          }
+          &.rejected {
+            color: #f44336;
+          }
+        }
+      }
+      
+      .application-content {
+        margin-bottom: 20rpx;
+        
+        .reason {
+          font-size: 28rpx;
+          color: #666;
+          line-height: 1.5;
+        }
+      }
+      
+      .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 20rpx;
+        
+        .btn {
+          padding: 15rpx 30rpx;
+          border-radius: 8rpx;
+          font-size: 26rpx;
+          
+          &.approve {
+            background: #4caf50;
+            color: white;
+          }
+          
+          &.reject {
+            background: #f44336;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="volunteer-manage-page">
+    <view class="manage-header">
+      <view class="title">志愿者申请管理</view>
+      <view class="stats">
+        <view class="stat-item">
+          <view class="count">{{ pendingCount }}</view>
+          <view class="label">待处理</view>
+        </view>
+        <view class="stat-item">
+          <view class="count">{{ approvedCount }}</view>
+          <view class="label">已通过</view>
+        </view>
+        <view class="stat-item">
+          <view class="count">{{ rejectedCount }}</view>
+          <view class="label">已拒绝</view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="application-list">
+      <view class="application-item" wx:for="{{ applicationList }}" wx:key="id">
+        <view class="applicant-info">
+          <image class="avatar" src="{{ item.avatar || '/static/images/default-avatar.png' }}"></image>
+          <view class="info-text">
+            <view class="name">{{ item.name }}</view>
+            <view class="time">{{ item.applyTime }}</view>
+          </view>
+          <view class="status {{ item.status }}">{{ item.statusText }}</view>
+        </view>
+        
+        <view class="application-content">
+          <view class="reason">{{ item.reason }}</view>
+        </view>
+        
+        <view class="action-buttons" wx:if="{{ item.status === 'pending' }}">
+          <view class="btn approve" @tap="handleApprove(item.id)">通过</view>
+          <view class="btn reject" @tap="handleReject(item.id)">拒绝</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { connect } from 'wepy-redux'
+
+@connect({
+  userInfo(state) {
+    return state.user.info
+  },
+  userRole(state) {
+    return state.user.role
+  }
+})
+export default class VolunteerManage extends wepy.page {
+  data = {
+    applicationList: [],
+    pendingCount: 0,
+    approvedCount: 0,
+    rejectedCount: 0
+  }
+
+  onLoad() {
+    this.loadApplications()
+  }
+
+  async loadApplications() {
+    try {
+      // 这里应该调用实际的API获取志愿者申请列表
+      // const res = await getVolunteerApplications()
+      // this.applicationList = res.data
+      
+      // 模拟数据
+      this.applicationList = [
+        {
+          id: 1,
+          name: '张三',
+          avatar: '',
+          applyTime: '2024-01-15 10:30',
+          reason: '我热爱小动物，希望能为流浪猫狗提供帮助，有充足的时间参与志愿活动。',
+          status: 'pending',
+          statusText: '待处理'
+        },
+        {
+          id: 2,
+          name: '李四',
+          avatar: '',
+          applyTime: '2024-01-14 15:20',
+          reason: '是一名大学生，周末时间充裕，愿意参与救助活动。',
+          status: 'approved',
+          statusText: '已通过'
+        }
+      ]
+      
+      this.calculateStats()
+    } catch (err) {
+      wx.showToast({ title: '加载失败', icon: 'none' })
+    }
+  }
+
+  calculateStats() {
+    this.pendingCount = this.applicationList.filter(item => item.status === 'pending').length
+    this.approvedCount = this.applicationList.filter(item => item.status === 'approved').length
+    this.rejectedCount = this.applicationList.filter(item => item.status === 'rejected').length
+  }
+
+  async handleApprove(id) {
+    try {
+      wx.showLoading({ title: '处理中' })
+      // await approveVolunteerApplication(id)
+      // 更新本地数据
+      const index = this.applicationList.findIndex(item => item.id === id)
+      if (index !== -1) {
+        this.applicationList[index].status = 'approved'
+        this.applicationList[index].statusText = '已通过'
+      }
+      this.calculateStats()
+      wx.hideLoading()
+      wx.showToast({ title: '已通过', icon: 'success' })
+    } catch (err) {
+      wx.hideLoading()
+      wx.showToast({ title: '操作失败', icon: 'none' })
+    }
+  }
+
+  async handleReject(id) {
+    try {
+      wx.showLoading({ title: '处理中' })
+      // await rejectVolunteerApplication(id)
+      // 更新本地数据
+      const index = this.applicationList.findIndex(item => item.id === id)
+      if (index !== -1) {
+        this.applicationList[index].status = 'rejected'
+        this.applicationList[index].statusText = '已拒绝'
+      }
+      this.calculateStats()
+      wx.hideLoading()
+      wx.showToast({ title: '已拒绝', icon: 'success' })
+    } catch (err) {
+      wx.hideLoading()
+      wx.showToast({ title: '操作失败', icon: 'none' })
+    }
+  }
+}
+</script>

@@ -1,0 +1,126 @@
+<template>
+  <view class="rescue-publish-page">
+    <nav-bar title="发布救助信息" showBack="{{true}}"></nav-bar>
+    
+    <form class="publish-form" bindsubmit="handleSubmit">
+      <!-- 标题 -->
+      <view class="form-item">
+        <text class="label">救助标题</text>
+        <input class="input" name="title" placeholder="请输入救助标题" required />
+      </view>
+      <!-- 内容 -->
+      <view class="form-item">
+        <text class="label">救助详情</text>
+        <textarea class="textarea" name="content" placeholder="请输入救助详情" rows="6" required></textarea>
+      </view>
+      <!-- 图片上传 -->
+      <view class="form-item">
+        <text class="label">救助图片</text>
+        <view class="upload-box">
+          <image wx:for="{{imgList}}" wx:key="index" src="{{item}}" class="upload-img" />
+          <button class="upload-btn" bindtap="chooseImage" wx:if="{{imgList.length < 3}}">+ 上传图片</button>
+        </view>
+      </view>
+      <!-- 提交按钮 -->
+      <button class="submit-btn" form-type="submit">发布</button>
+    </form>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import NavBar from '@/components/nav-bar/index'
+import { request } from '@/utils/request'
+import { API_PATH } from '@/config/index'
+
+export default class RescuePublish extends wepy.page {
+  components = { NavBar }
+  data = { imgList: [] }
+
+  methods = {
+    async chooseImage() {
+      const res = await wx.chooseImage({ count: 3 - this.imgList.length })
+      // 模拟上传图片，实际替换为真实上传接口
+      const tempFilePaths = res.tempFilePaths
+      this.imgList = [...this.imgList, ...tempFilePaths]
+      this.$apply()
+    },
+    async handleSubmit(e) {
+      try {
+        wepy.showLoading({ title: '发布中...' })
+        const formData = {
+          ...e.detail.value,
+          images: this.imgList,
+          publisher: wepy.$store.state.user.userInfo.username
+        }
+        await request({ url: API_PATH.RESCUE_PUBLISH, method: 'POST', data: formData })
+        wepy.hideLoading()
+        wepy.showToast({ title: '发布成功', icon: 'success' })
+        setTimeout(() => { wepy.navigateBack() }, 1500)
+      } catch (err) {
+        wepy.hideLoading()
+        wepy.showToast({ title: '发布失败', icon: 'none' })
+      }
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.rescue-publish-page {
+  background: #f8f8f8;
+  min-height: 100vh;
+  .publish-form {
+    padding: 30rpx;
+    .form-item {
+      margin-bottom: 30rpx;
+      .label { font-size: 28rpx; margin-bottom: 10rpx; display: block; }
+      .input {
+        width: 100%;
+        height: 80rpx;
+        border: 1rpx solid #eee;
+        border-radius: 8rpx;
+        padding: 0 20rpx;
+        font-size: 28rpx;
+      }
+      .textarea {
+        width: 100%;
+        border: 1rpx solid #eee;
+        border-radius: 8rpx;
+        padding: 20rpx;
+        font-size: 28rpx;
+      }
+      .upload-box {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20rpx;
+        .upload-img {
+          width: 200rpx;
+          height: 200rpx;
+          border-radius: 8rpx;
+        }
+        .upload-btn {
+          width: 200rpx;
+          height: 200rpx;
+          border: 1rpx dashed #eee;
+          background: #fff;
+          border-radius: 8rpx;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: #999;
+        }
+      }
+    }
+    .submit-btn {
+      width: 100%;
+      height: 88rpx;
+      background: #FF9E7D;
+      color: #fff;
+      border: none;
+      border-radius: 8rpx;
+      font-size: 32rpx;
+    }
+  }
+}
+</style>

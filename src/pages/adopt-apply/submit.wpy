@@ -1,0 +1,132 @@
+<template>
+  <view class="adopt-submit-page">
+    <nav-bar title="提交领养申请" showBack="{{true}}"></nav-bar>
+    
+    <form class="adopt-form" bindsubmit="handleSubmit">
+      <!-- 猫咪选择 -->
+      <view class="form-item">
+        <text class="label">领养猫咪</text>
+        <picker mode="selector" range="{{catList}}" range-key="name" bindchange="handleCatChange">
+          <view class="picker">{{selectedCat.name || '请选择要领养的猫咪'}}</view>
+        </picker>
+      </view>
+      <!-- 个人信息 -->
+      <view class="form-item">
+        <text class="label">姓名</text>
+        <input class="input" name="name" placeholder="请输入姓名" required />
+      </view>
+      <view class="form-item">
+        <text class="label">联系方式</text>
+        <input class="input" name="phone" type="number" placeholder="请输入手机号" required />
+      </view>
+      <view class="form-item">
+        <text class="label">居住地址</text>
+        <input class="input" name="address" placeholder="请输入详细居住地址" required />
+      </view>
+      <!-- 领养说明 -->
+      <view class="form-item">
+        <text class="label">领养说明</text>
+        <textarea class="textarea" name="desc" placeholder="请说明领养原因、饲养条件等" rows="6"></textarea>
+      </view>
+      <!-- 提交按钮 -->
+      <button class="submit-btn" form-type="submit">提交申请</button>
+    </form>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import NavBar from '@/components/nav-bar/index'
+import { request } from '@/utils/request'
+import { API_PATH } from '@/config/index'
+
+export default class AdoptSubmit extends wepy.page {
+  components = { NavBar }
+  data = {
+    catList: [],
+    selectedCat: {}
+  }
+
+  onLoad() { this.getCatList() }
+
+  methods = {
+    async getCatList() {
+      const res = await request({ url: API_PATH.CAT_LIST })
+      this.catList = res || []
+      this.$apply()
+    },
+    handleCatChange(e) {
+      this.selectedCat = this.catList[e.detail.value]
+      this.$apply()
+    },
+    async handleSubmit(e) {
+      if (!this.selectedCat.id) {
+        return wepy.showToast({ title: '请选择领养猫咪', icon: 'none' })
+      }
+      try {
+        wepy.showLoading({ title: '提交中...' })
+        const formData = {
+          ...e.detail.value,
+          catId: this.selectedCat.id,
+          applicant: wepy.$store.state.user.userInfo.username
+        }
+        await request({ url: API_PATH.ADOPT_SUBMIT, method: 'POST', data: formData })
+        wepy.hideLoading()
+        wepy.showToast({ title: '申请提交成功', icon: 'success' })
+        setTimeout(() => { wepy.navigateBack() }, 1500)
+      } catch (err) {
+        wepy.hideLoading()
+        wepy.showToast({ title: '提交失败', icon: 'none' })
+      }
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.adopt-submit-page {
+  background: #f8f8f8;
+  min-height: 100vh;
+  .adopt-form {
+    padding: 30rpx;
+    .form-item {
+      margin-bottom: 30rpx;
+      .label { font-size: 28rpx; margin-bottom: 10rpx; display: block; }
+      .picker {
+        width: 100%;
+        height: 80rpx;
+        border: 1rpx solid #eee;
+        border-radius: 8rpx;
+        padding: 0 20rpx;
+        line-height: 80rpx;
+        font-size: 28rpx;
+        color: #999;
+      }
+      .input {
+        width: 100%;
+        height: 80rpx;
+        border: 1rpx solid #eee;
+        border-radius: 8rpx;
+        padding: 0 20rpx;
+        font-size: 28rpx;
+      }
+      .textarea {
+        width: 100%;
+        border: 1rpx solid #eee;
+        border-radius: 8rpx;
+        padding: 20rpx;
+        font-size: 28rpx;
+      }
+    }
+    .submit-btn {
+      width: 100%;
+      height: 88rpx;
+      background: #FF9E7D;
+      color: #fff;
+      border: none;
+      border-radius: 8rpx;
+      font-size: 32rpx;
+    }
+  }
+}
+</style>

@@ -1,0 +1,140 @@
+<style lang="less">
+.user-info {
+  background: #fff;
+  padding: 40rpx 30rpx;
+  display: flex;
+  align-items: center;
+  .avatar {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 50%;
+    margin-right: 30rpx;
+  }
+  .info {
+    .nickname {
+      font-size: 36rpx;
+      font-weight: bold;
+    }
+    .role {
+      font-size: 28rpx;
+      color: #999;
+    }
+  }
+}
+.menu-list {
+  margin-top: 20rpx;
+  background: #fff;
+  .menu-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 30rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+    .left {
+      display: flex;
+      align-items: center;
+      image {
+        width: 40rpx;
+        height: 40rpx;
+        margin-right: 20rpx;
+      }
+    }
+    .arrow {
+      color: #ccc;
+    }
+  }
+}
+</style>
+
+<template>
+  <view>
+    <view class="user-info">
+      <image class="avatar" src="{{ userInfo.avatar || '/static/images/default-avatar.png' }}" />
+      <view class="info">
+        <view class="nickname">{{ userInfo.nickname || '未登录' }}</view>
+        <view class="role">{{ roleText }}</view>
+      </view>
+    </view>
+
+    <view class="menu-list">
+      <view class="menu-item" wx:if="{{ userRole === 'admin' }}" @tap="goTo('/pages/admin/user-manage')">
+        <view class="left">
+          <image src="/static/images/icons/user.png" />
+          <text>用户管理</text>
+        </view>
+        <text class="arrow">></text>
+      </view>
+
+      <view class="menu-item" wx:if="{{ userRole === 'user' }}" @tap="goTo('/pages/adopt-apply/submit?catId=')">
+        <view class="left">
+          <image src="/static/images/icons/apply.png" />
+          <text>我的领养申请</text>
+        </view>
+        <text class="arrow">></text>
+      </view>
+
+      <!-- 更多菜单... -->
+
+      <view class="menu-item" wx:if="{{ !userInfo }}" @tap="goTo('/pages/load/login/index')">
+        <view class="left">
+          <image src="/static/images/icons/login.png" />
+          <text>登录/注册</text>
+        </view>
+        <text class="arrow">></text>
+      </view>
+      <view class="menu-item" wx:if="{{ userInfo }}" @tap="logout">
+        <view class="left">
+          <image src="/static/images/icons/logout.png" />
+          <text>退出登录</text>
+        </view>
+        <text class="arrow">></text>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { connect } from 'wepy-redux'
+import { clearUser as logoutAction } from '@/store/actions/user'
+
+@connect({
+  userInfo(state) {
+    return state.user.info
+  },
+  userRole(state) {
+    return state.user.role
+  }
+}, {
+  logoutAction
+})
+export default class Mine extends wepy.page {
+  computed = {
+    roleText() {
+      const map = {
+        admin: '管理员',
+        member: '救助组织成员',
+        user: '普通用户'
+      }
+      return map[this.userRole] || '游客'
+    }
+  }
+
+  methods = {
+    goTo(url) {
+      wepy.navigateTo({ url })
+    },
+    logout() {
+      wx.showModal({
+        title: '提示',
+        content: '确定退出登录吗？',
+        success: (res) => {
+          if (res.confirm) {
+            this.logoutAction()
+            wx.reLaunch({ url: '/pages/home/index' })
+          }
+        }
+      })
+    }
+  }
+}
+</script>

@@ -1,19 +1,31 @@
 <style lang="less">
   .counter {
     text-align: left;
-    font-size: 12px;
+    font-size: 28rpx; /* 修复：改用 rpx 适配小程序多设备 */
+    display: flex;    /* 新增：按钮横向排列，更符合小程序交互 */
+    align-items: center;
+    gap: 10rpx;       /* 新增：按钮间距 */
+    flex-wrap: wrap;  /* 新增：超出换行 */
   }
   .count {
-    font-size: 18px;
+    font-size: 32rpx; /* 修复：改用 rpx */
     font-weight: bold;
+    margin: 0 10rpx;  /* 新增：数字与按钮间距 */
     &.red {
-      color: red;
+      color: #ff6b6b; /* 优化：业务风格红色 */
     }
     &.green {
-      color: green;
+      color: #66CC99; /* 优化：业务风格绿色 */
     }
   }
+  /* 新增：按钮样式统一 */
+  .counter button {
+    background: #f5f5f5;
+    border: 1rpx solid #eee;
+    border-radius: 8rpx;
+  }
 </style>
+
 <template>
   <view class="counter {{style}}">
     <button @tap="plus" size="mini">  +  </button>
@@ -26,6 +38,7 @@
     <text class="count"> {{asyncNum}} </text>
   </view>
 </template>
+
 <script>
   import wepy from 'wepy'
   import { connect } from 'wepy-redux'
@@ -33,54 +46,58 @@
   import { asyncInc } from '../store/actions'
 
   @connect({
+    // 映射 redux state 到组件属性
     stateNum (state) {
-      return state.counter.num
+      return state.counter && state.counter.num || 0 // 修复：使用逻辑运算符替代可选链
     },
     asyncNum (state) {
-      return state.counter.asyncNum
+      return state.counter && state.counter.asyncNum || 0 // 修复：使用逻辑运算符替代可选链
     }
   }, {
+    // 映射 redux action 到组件方法
     incNum: INCREMENT,
     decNum: DECREMENT,
     asyncInc
   })
 
   export default class Counter extends wepy.component {
+    // 接收父组件传递的属性（支持双向绑定）
     props = {
       num: {
         type: [Number, String],
         coerce: function (v) {
-          return +v
+          return +v // 强制转为数字
         },
         default: 50
       }
     }
 
-    data = {
-    }
-    events = {
-      'index-broadcast': (...args) => {
-        let $event = args[args.length - 1]
-        console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
-      }
-    }
+    data = {}
 
+    // 移除无用的测试事件（index-broadcast 是旧测试逻辑）
+    events = {}
+
+    // 监听 num 变化，向父组件传递新值（核心：实现双向绑定）
     watch = {
       num (curVal, oldVal) {
-        console.log(`旧值：${oldVal}，新值：${curVal}`)
+        console.log(`计数器值变化：旧值=${oldVal}，新值=${curVal}`)
+        // 触发自定义事件，把新值传递给父组件
+        this.$emit('num-change', curVal)
       }
     }
 
     methods = {
+      // 自增：修改 num 并触发事件
       plus () {
         this.num = this.num + 1
-        console.log(this.$name + ' plus tap')
-
+        console.log('计数器自增：', this.num)
+        // 额外触发自定义事件（兼容旧逻辑）
         this.$emit('index-emit', 1, 2, 3)
       },
+      // 自减：修改 num 并触发事件
       minus () {
         this.num = this.num - 1
-        console.log(this.$name + ' minus tap')
+        console.log('计数器自减：', this.num)
       }
     }
   }

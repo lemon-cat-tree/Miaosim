@@ -41,6 +41,11 @@ module.exports = {
     }
   },
   plugins: {
+    // uglifyjs: {
+    //   filter: /\.js$/,
+    //   config: {
+    //   }
+    // },
   },
   appConfig: {
     noPromiseAPI: ['createSelectorQuery']

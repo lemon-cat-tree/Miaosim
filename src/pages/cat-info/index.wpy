@@ -1,0 +1,67 @@
+<style lang="less">
+.list-container {
+  padding: 20rpx;
+}
+.loading {
+  text-align: center;
+  padding: 30rpx;
+  color: #999;
+}
+.empty {
+  text-align: center;
+  padding: 50rpx;
+  color: #999;
+}
+</style>
+
+<template>
+  <view class="list-container">
+    <view wx:for="{{ catList }}" wx:key="id">
+      <CatCard :cat="item" @click="goToDetail(item.id)" />
+    </view>
+    <view class="loading" wx:if="{{ loading }}">加载中...</view>
+    <view class="empty" wx:if="{{ !loading && catList.length === 0 }}">暂无猫猫档案</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import CatCard from '../../components/CatCard'
+import { getCatList } from '@/api/cat'
+
+export default class CatInfoIndex extends wepy.page {
+  components = {
+    CatCard
+  }
+
+  data = {
+    catList: [],
+    loading: true,
+    page: 1,
+    limit: 10
+  }
+
+  onLoad() {
+    this.fetchCats()
+  }
+
+  async fetchCats() {
+    this.loading = true
+    try {
+      const res = await getCatList({ page: this.page, limit: this.limit })
+      this.catList = res.data
+    } catch (err) {
+      wx.showToast({ title: '加载失败', icon: 'none' })
+    } finally {
+      this.loading = false
+      this.$apply()
+    }
+  }
+
+  methods = {
+    goToDetail(id) {
+      wepy.navigateTo({ url: `/pages/cat-info/detail?id=${id}` })
+    }
+  }
+}
+</script>

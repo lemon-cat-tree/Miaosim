@@ -1,0 +1,89 @@
+<style lang="less">
+.detail {
+  padding: 30rpx;
+  background: #fff;
+  .avatar {
+    width: 100%;
+    height: 400rpx;
+    border-radius: 20rpx;
+  }
+  .name {
+    font-size: 40rpx;
+    font-weight: bold;
+    margin: 20rpx 0;
+  }
+  .info-item {
+    font-size: 32rpx;
+    color: #333;
+    margin-bottom: 16rpx;
+  }
+}
+.apply-btn {
+  position: fixed;
+  bottom: 30rpx;
+  left: 30rpx;
+  right: 30rpx;
+  background-color: #1296db;
+  color: #fff;
+  text-align: center;
+  padding: 30rpx;
+  border-radius: 50rpx;
+}
+</style>
+
+<template>
+  <view>
+    <view class="detail" wx:if="{{ cat }}">
+      <image class="avatar" src="{{ cat.avatar }}" mode="aspectFill" />
+      <view class="name">{{ cat.name }}</view>
+      <view class="info-item">品种：{{ cat.breed }}</view>
+      <view class="info-item">性别：{{ cat.gender === 'male' ? '男孩' : '女孩' }}</view>
+      <view class="info-item">年龄：{{ cat.age }}岁</view>
+      <view class="info-item">毛色：{{ cat.color }}</view>
+      <view class="info-item">健康状况：{{ cat.health }}</view>
+      <view class="info-item">性格描述：{{ cat.personality }}</view>
+      <view class="info-item">救助故事：{{ cat.story }}</view>
+    </view>
+
+    <view class="apply-btn" wx:if="{{ userRole === 'user' }}" @tap="goToApply">申请领养</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { connect } from 'wepy-redux'
+import { getCatDetail } from '@/api/cat'
+
+@connect({
+  userRole(state) {
+    return state.user.role
+  }
+})
+export default class CatInfoDetail extends wepy.page {
+  data = {
+    cat: null
+  }
+
+  onLoad(query) {
+    this.catId = query.id
+    this.fetchDetail()
+  }
+
+  async fetchDetail() {
+    try {
+      const res = await getCatDetail(this.catId)
+      this.cat = res.data
+    } catch (err) {
+      wx.showToast({ title: '获取详情失败', icon: 'none' })
+    } finally {
+      this.$apply()
+    }
+  }
+
+  methods = {
+    goToApply() {
+      wepy.navigateTo({ url: `/pages/adopt-apply/submit?catId=${this.catId}` })
+    }
+  }
+}
+</script>

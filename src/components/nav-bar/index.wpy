@@ -1,0 +1,238 @@
+<style lang="less">
+.nav-bar {
+  position: relative;
+  width: 100%;
+  height: 88rpx;
+  background-color: #ffffff;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  
+  .nav-back {
+    width: 60rpx;
+    height: 60rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20rpx;
+    
+    .back-icon {
+      width: 36rpx;
+      height: 36rpx;
+      color: #333333;
+    }
+  }
+  
+  .nav-title {
+    flex: 1;
+    text-align: center;
+    font-size: 36rpx;
+    font-weight: 500;
+    color: #333333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 20rpx;
+  }
+  
+  .nav-right {
+    min-width: 60rpx;
+    height: 60rpx;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    
+    .right-text {
+      font-size: 28rpx;
+      color: #666666;
+      padding: 0 10rpx;
+    }
+    
+    .right-icon {
+      width: 36rpx;
+      height: 36rpx;
+      color: #666666;
+      margin-left: 10rpx;
+    }
+  }
+  
+  // 透明背景样式
+  &.transparent {
+    background-color: transparent;
+    box-shadow: none;
+    
+    .nav-back .back-icon,
+    .nav-title,
+    .nav-right .right-text,
+    .nav-right .right-icon {
+      color: #ffffff;
+    }
+  }
+  
+  // 固定定位样式
+  &.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+  }
+  
+  // 带状态栏高度的样式
+  &.with-status-bar {
+    height: calc(88rpx + var(--status-bar-height, 44rpx));
+    padding-top: var(--status-bar-height, 44rpx);
+  }
+}
+</style>
+
+<template>
+  <view class="nav-bar {{className}}" style="{{customStyle}}">
+    <!-- 返回按钮 -->
+    <view class="nav-back" @tap="handleBack" wx:if="{{showBack}}">
+      <icon class="back-icon" type="arrow-left" size="18" wx:if="{{!backIcon}}"/>
+      <image class="back-icon" src="{{backIcon}}" mode="aspectFit" wx:else/>
+    </view>
+    
+    <!-- 标题区域 -->
+    <view class="nav-title">
+      <slot name="title">
+        <text>{{title}}</text>
+      </slot>
+    </view>
+    
+    <!-- 右侧操作区域 -->
+    <view class="nav-right">
+      <slot name="right">
+        <text class="right-text" @tap="handleRightTap" wx:if="{{rightText}}">{{rightText}}</text>
+        <icon class="right-icon" type="{{rightIcon}}" size="18" @tap="handleRightTap" wx:if="{{rightIcon}}"/>
+      </slot>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class NavBar extends wepy.component {
+  config = {
+    component: true
+  }
+  props = {
+    // 导航栏标题
+    title: {
+      type: String,
+      default: ''
+    },
+    
+    // 是否显示返回按钮
+    showBack: {
+      type: Boolean,
+      default: true
+    },
+    
+    // 自定义返回按钮图标
+    backIcon: {
+      type: String,
+      default: ''
+    },
+    
+    // 右侧文字
+    rightText: {
+      type: String,
+      default: ''
+    },
+    
+    // 右侧图标
+    rightIcon: {
+      type: String,
+      default: ''
+    },
+    
+    // 自定义类名
+    className: {
+      type: String,
+      default: ''
+    },
+    
+    // 自定义样式
+    customStyle: {
+      type: String,
+      default: ''
+    },
+    
+    // 是否固定定位
+    fixed: {
+      type: Boolean,
+      default: false
+    },
+    
+    // 是否包含状态栏高度
+    withStatusBar: {
+      type: Boolean,
+      default: false
+    }
+  }
+
+  data = {
+    statusBarHeight: 0
+  }
+
+  computed = {
+    // 动态计算类名
+    finalClassName() {
+      let classes = this.className || ''
+      if (this.fixed) classes += ' fixed'
+      if (this.withStatusBar) classes += ' with-status-bar'
+      return classes.trim()
+    }
+  }
+
+  methods = {
+    // 处理返回按钮点击
+    handleBack() {
+      // 优先触发自定义事件
+      this.$emit('back')
+      
+      // 如果没有阻止默认行为，则执行默认返回逻辑
+      if (!this.$listeners.back) {
+        const pages = getCurrentPages() // 修复：添加全局函数声明或导入
+        if (pages.length > 1) {
+          wx.navigateBack({
+            delta: 1
+          })
+        } else {
+          // 如果是首页，跳转到 tabBar 页面
+          wx.switchTab({
+            url: '/pages/home/index'
+          })
+        }
+      }
+    },
+    
+    // 处理右侧操作点击
+    handleRightTap() {
+      this.$emit('right-tap')
+    }
+  }
+
+  // 组件挂载时获取状态栏高度
+  mounted() {
+    // 获取系统信息
+    wx.getSystemInfo({
+      success: (res) => {
+        this.statusBarHeight = res.statusBarHeight
+        // 设置 CSS 变量
+        const query = wx.createSelectorQuery().in(this)
+        query.select('.nav-bar').boundingClientRect((rect) => {
+          if (rect) {
+            const style = `--status-bar-height: ${this.statusBarHeight}rpx;`
+            this.customStyle = this.customStyle ? `${this.customStyle};${style}` : style
+          }
+        }).exec()
+      }
+    })
+  }
+}
+</script>

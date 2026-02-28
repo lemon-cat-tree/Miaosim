@@ -1,0 +1,21 @@
+<template>
+  <view class="container">
+    <!-- 这里放页面的结构 -->
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class PageName extends wepy.page {
+  data = {}
+  methods = {}
+  onLoad() {}
+}
+</script>
+
+<style lang="less">
+.container {
+  /* 页面样式 */
+}
+</style>
