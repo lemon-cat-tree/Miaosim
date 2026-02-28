@@ -1,4 +1,4 @@
-﻿{
+{
   "description": "项目配置文件",
   "setting": {
     "urlCheck": true,
@@ -27,5 +27,10 @@
     "tabSize": 2
   },
   "srcMiniprogramRoot": "dist/",
-  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
+  "request合法域名": [
+    "https://api.your-domain.com",
+    "https://636c-cloud1-6gvny8o5da9ae0e6-1388844129.tcb.qcloud.la",
+    "https://tcb-api.tencentcloudapi.com"
+  ]
 }
