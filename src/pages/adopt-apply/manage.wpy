@@ -1,0 +1,366 @@
+﻿<template>
+  <view class="adopt-manage-page">
+    <nav-bar title="领养申请管理" showBack="{{true}}"></nav-bar>
+    
+    <view class="content">
+      <!-- 筛选区域 -->
+      <view class="filter-bar">
+        <picker mode="selector" range="{{ statusOptions }}" range-key="text" bindchange="handleStatusChange">
+          <view class="picker">{{ statusText }}</view>
+        </picker>
+        <input class="search-input" placeholder="搜索申请人姓名" bindinput="onSearchInput" value="{{ searchKeyword }}" />
+      </view>
+      
+      <!-- 申请列表 -->
+      <view class="application-list">
+        <view class="application-item" wx:for="{{ filteredApplications }}" wx:key="id">
+          <view class="applicant-info">
+            <image class="avatar" src="{{ item.user.avatar || '/static/images/default-avatar.png' }}" mode="aspectFill" />
+            <view class="info">
+              <view class="name">{{ item.user.nickname || item.user.username }}</view>
+              <view class="time">{{ formatDate(item.applyTime) }}</view>
+            </view>
+            <view class="status {{ item.status }}">{{ statusMap[item.status] }}</view>
+          </view>
+          
+          <view class="cat-info">
+            <view class="cat-name">领养猫咪：{{ item.cat.name }}</view>
+            <view class="cat-breed">品种：{{ item.cat.breed }} · {{ item.cat.gender === 'male' ? '男孩' : '女孩' }}</view>
+          </view>
+          
+          <view class="reason">
+            <view class="label">申请理由：</view>
+            <view class="content">{{ item.reason }}</view>
+          </view>
+          
+          <view class="action-buttons" wx:if="{{ item.status === 'pending' }}">
+            <view class="btn approve" @tap="handleApprove(item.id)">通过</view>
+            <view class="btn reject" @tap="handleReject(item.id)">拒绝</view>
+          </view>
+          
+          <view class="action-buttons" wx:elif="{{ item.status === 'approved' }}">
+            <view class="btn complete" @tap="handleComplete(item.id)">完成</view>
+          </view>
+        </view>
+        
+        <view class="empty-tip" wx:if="{{ filteredApplications.length === 0 }}">
+          暂无领养申请记录
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import NavBar from '@/components/nav-bar/index'
+
+export default class AdoptManage extends wepy.page {
+  components = { NavBar }
+  
+  data = {
+    applications: [],
+    searchKeyword: '',
+    statusFilter: 'all',
+    statusOptions: [
+      { text: '全部状态', value: 'all' },
+      { text: '待处理', value: 'pending' },
+      { text: '已通过', value: 'approved' },
+      { text: '已拒绝', value: 'rejected' }
+    ],
+    statusMap: {
+      pending: '待处理',
+      approved: '已通过',
+      rejected: '已拒绝'
+    }
+  }
+
+  onLoad() {
+    this.loadApplications()
+  }
+
+  async loadApplications() {
+    try {
+      // 模拟数据，实际应调用API
+      this.applications = [
+        {
+          id: 1,
+          user: {
+            id: 101,
+            username: 'user1',
+            nickname: '张三',
+            avatar: '/static/images/user-avatar.png'
+          },
+          cat: {
+            id: 1,
+            name: '小花',
+            breed: '中华田园猫',
+            gender: 'female'
+          },
+          reason: '我有稳定的住所和收入，能为猫咪提供良好的生活环境，家里已有宠物护理经验。',
+          applyTime: '2024-01-15T10:30:00',
+          status: 'pending'
+        },
+        {
+          id: 2,
+          user: {
+            id: 102,
+            username: 'user2',
+            nickname: '李四',
+            avatar: '/static/images/user-avatar.png'
+          },
+          cat: {
+            id: 2,
+            name: '大黄',
+            breed: '橘猫',
+            gender: 'male'
+          },
+          reason: '作为一名兽医，我有能力照顾好流浪动物，希望能给大黄一个温暖的家。',
+          applyTime: '2024-01-14T15:20:00',
+          status: 'approved'
+        }
+      ]
+    } catch (
+          applyTime: '2024-01-14T15:20:00',
+          status: 'approved'
+        }
+      ]
+      this.$apply()
+    } catch (err) {
+      wx.showToast({ title: '加载失败', icon: 'none' })
+    }
+  }
+
+  formatDate(dateString) {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`
+  }
+
+  get filteredApplications() {
+    let list = this.applications
+    
+    // 状态筛选
+    if (this.statusFilter !== 'all') {
+      list = list.filter(item => item.status === this.statusFilter)
+    }
+    
+    // 搜索筛选
+    if (this.searchKeyword) {
+      const keyword = this.searchKeyword.toLowerCase()
+      list = list.filter(item => 
+        item.user.nickname.toLowerCase().includes(keyword) || 
+        item.user.username.toLowerCase().includes(keyword) ||
+        item.cat.name.toLowerCase().includes(keyword)
+      )
+    }
+    
+    return list
+  }
+
+  handleStatusChange(e) {
+    const index = e.detail.value
+    this.statusFilter = this.statusOptions[index].value
+    this.statusText = this.statusOptions[index].text
+    this.$apply()
+  }
+
+  onSearchInput(e) {
+    this.searchKeyword = e.detail.value
+    this.$apply()
+  }
+
+  handleApprove(id) {
+    wx.showModal({
+      title: '确认通过',
+      content: '确定要通过此领养申请吗？',
+      success: (res) => {
+        if (res.confirm) {
+          const index = this.applications.findIndex(item => item.id === id)
+          if (index !== -1) {
+            this.applications[index].status = 'approved'
+            this.$apply()
+            wx.showToast({ title: '已通过', icon: 'success' })
+          }
+        }
+      }
+    })
+  }
+
+  handleReject(id) {
+    wx.showModal({
+      title: '确认拒绝',
+      content: '确定要拒绝此领养申请吗？',
+      success: (res) => {
+        if (res.confirm) {
+          const index = this.applications.findIndex(item => item.id === id)
+          if (index !== -1) {
+            this.applications[index].status = 'rejected'
+            this.$apply()
+            wx.showToast({ title: '已拒绝', icon: 'success' })
+          }
+        }
+      }
+    })
+  }
+
+  handleComplete(id) {
+    wx.showModal({
+      title: '确认完成',
+      content: '确定此领养已完成吗？',
+      success: (res) => {
+        if (res.confirm) {
+          const index = this.applications.findIndex(item => item.id === id)
+          if (index !== -1) {
+            this.applications[index].status = 'completed'
+            this.$apply()
+            wx.showToast({ title: '已完成', icon: 'success' })
+          }
+        }
+      }
+    })
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.adopt-manage-page {
+  background: #f8f8f8;
+  min-height: 100vh;
+  
+  .content {
+    padding: 30rpx;
+    
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30rpx;
+      
+      .picker {
+        flex: 1;
+        height: 60rpx;
+        border: 1rpx solid #eee;
+        border-radius: 8rpx;
+        padding: 0 20rpx;
+        font-size: 28rpx;
+        line-height: 60rpx;
+        margin-right: 20rpx;
+      }
+      
+      .search-input {
+        flex: 1;
+        height: 60rpx;
+        border: 1rpx solid #eee;
+        border-radius: 8rpx;
+        padding: 0 20rpx;
+        font-size: 28rpx;
+      }
+    }
+    
+    .application-list {
+      .application-item {
+        background: white;
+        border-radius: 16rpx;
+        padding: 30rpx;
+        margin-bottom: 20rpx;
+        box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.05);
+        
+        .applicant-info {
+          display: flex;
+          align-items: center;
+          margin-bottom: 20rpx;
+          
+          .avatar {
+            width: 80rpx;
+            height: 80rpx;
+            border-radius: 50%;
+            margin-right: 20rpx;
+          }
+          
+          .info {
+            flex: 1;
+            
+            .name {
+              font-size: 32rpx;
+              font-weight: bold;
+              color: #333;
+            }
+            
+            .time {
+              font-size: 24rpx;
+              color: #999;
+              margin-top: 5rpx;
+            }
+          }
+          
+          .status {
+            padding: 6rpx 16rpx;
+            border-radius: 8rpx;
+            font-size: 24rpx;
+            &.pending { background: #ff9800; color: white; }
+            &.approved { background: #4caf50; color: white; }
+            &.rejected { background: #f44336; color: white; }
+            &.completed { background: #2196f3; color: white; }
+          }
+        }
+        
+        .cat-info {
+          margin-bottom: 20rpx;
+          
+          .cat-name {
+            font-size: 28rpx;
+            color: #333;
+            font-weight: bold;
+          }
+          
+          .cat-breed {
+            font-size: 26rpx;
+            color: #666;
+          }
+        }
+        
+        .reason {
+          margin-bottom: 20rpx;
+          
+          .label {
+            font-size: 28rpx;
+            color: #333;
+            margin-bottom: 10rpx;
+            display: block;
+          }
+          
+          .content {
+            font-size: 28rpx;
+            color: #666;
+            line-height: 1.6;
+          }
+        }
+        
+        .action-buttons {
+          display: flex;
+          justify-content: flex-end;
+          gap: 20rpx;
+          
+          .btn {
+            padding: 15rpx 30rpx;
+            border-radius: 8rpx;
+            font-size: 26rpx;
+            color: white;
+            
+            &.approve { background: #4caf50; }
+            &.reject { background: #f44336; }
+            &.complete { background: #2196f3; }
+          }
+        }
+      }
+      
+      .empty-tip {
+        text-align: center;
+        padding: 60rpx 0;
+        color: #999;
+        font-size: 28rpx;
+      }
+    }
+  }
+}
+</style>

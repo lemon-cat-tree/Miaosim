@@ -1,2 +1,6 @@
-export * from './counter'
+﻿export * from './counter'
 export * from './user'
+export * from './adopt'
+export * from './cat'
+export * from './feedback'
+export * from './rescue'

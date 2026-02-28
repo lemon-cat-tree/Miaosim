@@ -1,21 +1,311 @@
+﻿<style lang="less">
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+  
+  .title {
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .search {
+    width: 60%;
+    height: 60rpx;
+    background-color: #fff;
+    border-radius: 30rpx;
+    padding: 0 20rpx;
+    display: flex;
+    align-items: center;
+    
+    input {
+      flex: 1;
+      font-size: 28rpx;
+      color: #666;
+    }
+    
+    .search-icon {
+      font-size: 28rpx;
+      color: #999;
+    }
+  }
+}
+
+.rescue-list {
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  
+  .rescue-item {
+    padding: 30rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .item-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20rpx;
+      
+      .avatar {
+        width: 80rpx;
+        height: 80rpx;
+        border-radius: 50%;
+        margin-right: 20rpx;
+        background-color: #eee;
+      }
+      
+      .info {
+        flex: 1;
+        
+        .name {
+          font-size: 30rpx;
+          font-weight: bold;
+          color: #333;
+          margin-bottom: 10rpx;
+        }
+        
+        .time {
+          font-size: 24rpx;
+          color: #999;
+        }
+      }
+    }
+    
+    .item-content {
+      font-size: 28r2px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20rpx;
+    }
+    
+    .item-images {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10rpx;
+      margin-bottom: 20rpx;
+      
+      image {
+        width: 120rpx;
+        height: 120rpx;
+        border-radius: 8rpx;
+      }
+    }
+    
+    .item-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      .status {
+        font-size: 24rpx;
+        padding: 6rpx 16rpx;
+        border-radius: 8rpx;
+        
+        &.pending {
+          background-color: #fff9c4;
+          color: #e6a23c;
+        }
+        
+        &.approved {
+          background-color: #e7f3ed;
+          color: #67c23a;
+        }
+        
+        &.rejected {
+          background-color: #fef0f0;
+          color: #f56c6c;
+        }
+      }
+      
+      .actions {
+        display: flex;
+        gap: 20rpx;
+        
+        .action {
+          font-size: 24rpx;
+          color: #999;
+          
+          &.like {
+            color: #ff69b4;
+          }
+        }
+      }
+    }
+  }
+}
+
+.load-more {
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 28rpx;
+  color: #999;
+  
+  &.loading {
+    color: #666;
+  }
+}
+</style>
+
 <template>
   <view class="container">
-    <!-- 这里放页面的结构 -->
+    <view class="header">
+      <view class="title">救助信息</view>
+      <view class="search">
+        <text class="search-icon">🔍</text>
+        <input type="text" placeholder="搜索救助信息" v-model="searchKeyword" @input="onSearchInput" />
+      </view>
+    </view>
+
+    <view class="rescue-list">
+      <block wx:for="{{ rescueList }}" wx:key="id">
+        <view class="rescue-item">
+          <view class="item-header">
+            <image class="avatar" src="{{ item.publisherAvatar || '/static/images/default-avatar.png' }}" mode="aspectFill" />
+            <view class="info">
+              <view class="name">{{ item.publisherName || '匿名用户' }}</view>
+              <view class="time">发布于 {{ formatTime(item.createTime) }}</view>
+            </view>
+          </view>
+          
+          <view class="item-content">{{ item.content }}</view>
+          
+          <view class="item-images">
+            <block wx:for="{{ item.images }}" wx:key="index">
+              <image src="{{ item }}" mode="aspectFill" />
+            </block>
+          </view>
+          
+          <view class="item-actions">
+            <view class="status {{ item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected' }}">
+              {{ getStatusText(item.status) }}
+            </view>
+            <view class="actions">
+              <view class="action like" @tap="handleLike(item.id)">
+                <text>👍</text>
+                <text>{{ item.likes || 0 }}</text>
+              </view>
+              <view class="action" @tap="handleComment(item.id)">
+                <text>💬</text>
+                <text>{{ item.comments || 0 }}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+      
+      <view class="load-more" wx:if="{{ !loading && hasMore }}">
+        <text @tap="loadMore">加载更多</text>
+      </view>
+      
+      <view class="load-more" wx:if="{{ loading }}">加载中...</view>
+      
+      <view class="load-more" wx:if="{{ !loading && !hasMore && rescueList.length > 0 }}">没有更多数据了</view>
+      
+      <view class="load-more" wx:if="{{ !loading && rescueList.length === 0 }}">暂无救助信息</view>
+    </view>
   </view>
 </template>
 
 <script>
-import wepy from 'wepy'
+import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+import { fetchRescueListAsync } from '@/store/actions/rescue';
 
-export default class PageName extends wepy.page {
-  data = {}
-  methods = {}
-  onLoad() {}
+@connect({
+  rescueList(state) {
+    return state.rescue.list;
+  },
+  loading(state) {
+    return state.rescue.loading;
+  },
+  error(state) {
+    return state.rescue.error;
+  }
+})
+export default class RescueList extends wepy.page {
+  data = {
+    searchKeyword: '',
+    page: 1,
+    pageSize: 10,
+    hasMore: true
+  };
+
+  methods = {
+    formatTime(timestamp) {
+      if (!timestamp) return '';
+      const date = new Date(timestamp);
+      const now = new Date();
+      const diff = now - date;
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      
+      if (minutes < 1) return '刚刚';
+      if (minutes < 60) return `${minutes}分钟前`;
+      if (hours < 24) return `${hours}小时前`;
+      if (days < 7) return `${days}天前`;
+      return date.toLocaleDateString();
+    },
+
+    getStatusText(status) {
+      switch (status) {
+        case 'pending': return '待审核';
+        case 'approved': return '已通过';
+        case 'rejected': return '已拒绝';
+        default: return '未知状态';
+      }
+    },
+
+    onSearchInput(e) {
+      this.searchKeyword = e.detail.value;
+      this.page = 1;
+      this.hasMore = true;
+      this.fetchRescueList();
+    },
+
+    loadMore() {
+      this.page++;
+      this.fetchRescueList();
+    },
+
+    handleLike(id) {
+      // 点赞逻辑
+      console.log('点赞救助信息:', id);
+    },
+
+    handleComment(id) {
+      // 评论逻辑
+      console.log('评论救助信息:', id);
+    },
+
+    fetchRescueList() {
+      const params = {
+        page: this.page,
+        pageSize: this.pageSize,
+        keyword: this.searchKeyword
+      };
+      this.$dispatch(fetchRescueListAsync(params));
+    }
+  };
+
+  onLoad() {
+    this.fetchRescueList();
+  }
+
+  onReachBottom() {
+    if (this.hasMore && !this.loading) {
+      this.loadMore();
+    }
+  }
 }
 </script>
-
-<style lang="less">
-.container {
-  /* 页面样式 */
-}
-</style>

@@ -1,4 +1,4 @@
-<style lang="less">
+﻿<style lang="less">
 .nav-bar {
   position: relative;
   width: 100%;
@@ -58,7 +58,7 @@
     }
   }
   
-  // 透明背景样式
+  // 閫忔槑鑳屾櫙鏍峰紡
   &.transparent {
     background-color: transparent;
     box-shadow: none;
@@ -71,7 +71,7 @@
     }
   }
   
-  // 固定定位样式
+  // 鍥哄畾瀹氫綅鏍峰紡
   &.fixed {
     position: fixed;
     top: 0;
@@ -79,7 +79,7 @@
     z-index: 9999;
   }
   
-  // 带状态栏高度的样式
+  // 甯︾姸鎬佹爮楂樺害鐨勬牱寮?
   &.with-status-bar {
     height: calc(88rpx + var(--status-bar-height, 44rpx));
     padding-top: var(--status-bar-height, 44rpx);
@@ -89,20 +89,20 @@
 
 <template>
   <view class="nav-bar {{className}}" style="{{customStyle}}">
-    <!-- 返回按钮 -->
+    <!-- 杩斿洖鎸夐挳 -->
     <view class="nav-back" @tap="handleBack" wx:if="{{showBack}}">
       <icon class="back-icon" type="arrow-left" size="18" wx:if="{{!backIcon}}"/>
       <image class="back-icon" src="{{backIcon}}" mode="aspectFit" wx:else/>
     </view>
     
-    <!-- 标题区域 -->
+    <!-- 鏍囬鍖哄煙 -->
     <view class="nav-title">
       <slot name="title">
         <text>{{title}}</text>
       </slot>
     </view>
     
-    <!-- 右侧操作区域 -->
+    <!-- 鍙充晶鎿嶄綔鍖哄煙 -->
     <view class="nav-right">
       <slot name="right">
         <text class="right-text" @tap="handleRightTap" wx:if="{{rightText}}">{{rightText}}</text>
@@ -180,7 +180,7 @@ export default class NavBar extends wepy.component {
   }
 
   computed = {
-    // 动态计算类名
+
     finalClassName() {
       let classes = this.className || ''
       if (this.fixed) classes += ' fixed'
@@ -190,20 +190,19 @@ export default class NavBar extends wepy.component {
   }
 
   methods = {
-    // 处理返回按钮点击
+
     handleBack() {
-      // 优先触发自定义事件
+
       this.$emit('back')
       
-      // 如果没有阻止默认行为，则执行默认返回逻辑
       if (!this.$listeners.back) {
-        const pages = getCurrentPages() // 修复：添加全局函数声明或导入
+        const pages = getCurrentPages() 
         if (pages.length > 1) {
           wx.navigateBack({
             delta: 1
           })
         } else {
-          // 如果是首页，跳转到 tabBar 页面
+          
           wx.switchTab({
             url: '/pages/home/index'
           })
@@ -211,19 +210,19 @@ export default class NavBar extends wepy.component {
       }
     },
     
-    // 处理右侧操作点击
+   
     handleRightTap() {
       this.$emit('right-tap')
     }
   }
 
-  // 组件挂载时获取状态栏高度
+  
   mounted() {
-    // 获取系统信息
+    
     wx.getSystemInfo({
       success: (res) => {
         this.statusBarHeight = res.statusBarHeight
-        // 设置 CSS 变量
+        
         const query = wx.createSelectorQuery().in(this)
         query.select('.nav-bar').boundingClientRect((rect) => {
           if (rect) {
@@ -236,3 +235,4 @@ export default class NavBar extends wepy.component {
   }
 }
 </script>
+

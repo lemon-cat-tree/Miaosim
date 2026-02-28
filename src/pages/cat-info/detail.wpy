@@ -1,4 +1,4 @@
-<style lang="less">
+﻿<style lang="less">
 .detail {
   padding: 30rpx;
   background: #fff;
@@ -36,16 +36,16 @@
     <view class="detail" wx:if="{{ cat }}">
       <image class="avatar" src="{{ cat.avatar }}" mode="aspectFill" />
       <view class="name">{{ cat.name }}</view>
-      <view class="info-item">品种：{{ cat.breed }}</view>
-      <view class="info-item">性别：{{ cat.gender === 'male' ? '男孩' : '女孩' }}</view>
-      <view class="info-item">年龄：{{ cat.age }}岁</view>
-      <view class="info-item">毛色：{{ cat.color }}</view>
-      <view class="info-item">健康状况：{{ cat.health }}</view>
-      <view class="info-item">性格描述：{{ cat.personality }}</view>
-      <view class="info-item">救助故事：{{ cat.story }}</view>
+      <view class="info-item">鍝佺锛歿{ cat.breed }}</view>
+      <view class="info-item">鎬у埆锛歿{ cat.gender === 'male' ? '鐢峰' : '濂冲' }}</view>
+      <view class="info-item">骞撮緞锛歿{ cat.age }}宀?/view>
+      <view class="info-item">姣涜壊锛歿{ cat.color }}</view>
+      <view class="info-item">鍋ュ悍鐘跺喌锛歿{ cat.health }}</view>
+      <view class="info-item">鎬ф牸鎻忚堪锛歿{ cat.personality }}</view>
+      <view class="info-item">鏁戝姪鏁呬簨锛歿{ cat.story }}</view>
     </view>
 
-    <view class="apply-btn" wx:if="{{ userRole === 'user' }}" @tap="goToApply">申请领养</view>
+    <view class="apply-btn" wx:if="{{ userRole === 'user' }}" @tap="goToApply">鐢宠棰嗗吇</view>
   </view>
 </template>
 
@@ -74,7 +74,7 @@ export default class CatInfoDetail extends wepy.page {
       const res = await getCatDetail(this.catId)
       this.cat = res.data
     } catch (err) {
-      wx.showToast({ title: '获取详情失败', icon: 'none' })
+      wx.showToast({ title: '鑾峰彇璇︽儏澶辫触', icon: 'none' })
     } finally {
       this.$apply()
     }
@@ -87,3 +87,4 @@ export default class CatInfoDetail extends wepy.page {
   }
 }
 </script>
+

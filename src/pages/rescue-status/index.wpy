@@ -1,6 +1,6 @@
-<template>
+﻿<template>
   <view class="container">
-    <!-- 这里放页面的结构 -->
+    <!-- 杩欓噷鏀鹃〉闈㈢殑缁撴瀯 -->
   </view>
 </template>
 
@@ -16,6 +16,7 @@ export default class PageName extends wepy.page {
 
 <style lang="less">
 .container {
-  /* 页面样式 */
+  /* 椤甸潰鏍峰紡 */
 }
 </style>
+

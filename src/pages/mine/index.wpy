@@ -1,4 +1,4 @@
-<style lang="less">
+﻿<style lang="less">
 .user-info {
   background: #fff;
   padding: 40rpx 30rpx;
@@ -50,7 +50,7 @@
     <view class="user-info">
       <image class="avatar" src="{{ userInfo.avatar || '/static/images/default-avatar.png' }}" />
       <view class="info">
-        <view class="nickname">{{ userInfo.nickname || '未登录' }}</view>
+        <view class="nickname">{{ userInfo.nickname || '鏈櫥褰? }}</view>
         <view class="role">{{ roleText }}</view>
       </view>
     </view>
@@ -59,7 +59,7 @@
       <view class="menu-item" wx:if="{{ userRole === 'admin' }}" @tap="goTo('/pages/admin/user-manage')">
         <view class="left">
           <image src="/static/images/icons/user.png" />
-          <text>用户管理</text>
+          <text>鐢ㄦ埛绠＄悊</text>
         </view>
         <text class="arrow">></text>
       </view>
@@ -67,24 +67,24 @@
       <view class="menu-item" wx:if="{{ userRole === 'user' }}" @tap="goTo('/pages/adopt-apply/submit?catId=')">
         <view class="left">
           <image src="/static/images/icons/apply.png" />
-          <text>我的领养申请</text>
+          <text>鎴戠殑棰嗗吇鐢宠</text>
         </view>
         <text class="arrow">></text>
       </view>
 
-      <!-- 更多菜单... -->
+      <!-- 鏇村鑿滃崟... -->
 
       <view class="menu-item" wx:if="{{ !userInfo }}" @tap="goTo('/pages/load/login/index')">
         <view class="left">
           <image src="/static/images/icons/login.png" />
-          <text>登录/注册</text>
+          <text>鐧诲綍/娉ㄥ唽</text>
         </view>
         <text class="arrow">></text>
       </view>
       <view class="menu-item" wx:if="{{ userInfo }}" @tap="logout">
         <view class="left">
           <image src="/static/images/icons/logout.png" />
-          <text>退出登录</text>
+          <text>閫€鍑虹櫥褰?/text>
         </view>
         <text class="arrow">></text>
       </view>
@@ -126,7 +126,7 @@ export default class Mine extends wepy.page {
     logout() {
       wx.showModal({
         title: '提示',
-        content: '确定退出登录吗？',
+        content: '确定退出登录吗?,
         success: (res) => {
           if (res.confirm) {
             this.logoutAction()
@@ -138,3 +138,4 @@ export default class Mine extends wepy.page {
   }
 }
 </script>
+

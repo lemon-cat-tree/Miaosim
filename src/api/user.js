@@ -1,54 +1,41 @@
-import { request } from '@/utils/request'
-import { API_PATH } from '@/config/index'
+﻿import { cloudRequest } from '@/utils/request'
+import { CLOUD_FUNCTION } from '@/config/index'
 
-// 登录接口
-export const login = (data) => {
-    return request({
-        url: API_PATH.USER_LOGIN,
-        method: 'POST',
-        data
-    })
+// 使用云函数调用，移除所有HTTP请求
+export function login(params) {
+    return cloudRequest(CLOUD_FUNCTION.LOGIN, params);
 }
 
 // 注册接口
 export const register = (data) => {
-    return request({
-        url: API_PATH.USER_REGISTER,
-        method: 'POST',
-        data
-    })
-}
+    return cloudRequest(CLOUD_FUNCTION.REGISTER, data);
+};
 
 // 获取用户列表（管理员权限）
 export const getUserList = (params) => {
-    return request({
-        url: API_PATH.USER_LIST,
-        method: 'GET',
-        params
-    })
-}
+    return cloudRequest(CLOUD_FUNCTION.GET_USER_LIST, params);
+};
 
 // 删除用户（管理员权限）
 export const deleteUser = (id) => {
-    return request({
-        url: API_PATH.USER_DELETE.replace(':id', id),
-        method: 'DELETE'
-    })
-}
+    return cloudRequest(CLOUD_FUNCTION.DELETE_USER, { id });
+};
 
 // 获取当前用户信息
 export const getCurrentUser = () => {
-    return request({
-        url: API_PATH.USER_CURRENT,
-        method: 'GET'
-    })
-}
+    return cloudRequest(CLOUD_FUNCTION.GET_CURRENT_USER);
+};
 
 // 更新用户信息
 export const updateUserInfo = (data) => {
-    return request({
-        url: API_PATH.USER_UPDATE,
-        method: 'PUT',
-        data
-    })
-}
+    return cloudRequest(CLOUD_FUNCTION.UPDATE_USER_INFO, data);
+};
+
+// ✅ 添加其他常用API
+export const getCatList = (params) => {
+    return cloudRequest(CLOUD_FUNCTION.GET_CAT_LIST, params);
+};
+
+export const submitAdoption = (data) => {
+    return cloudRequest(CLOUD_FUNCTION.SUBMIT_ADOPT, data);
+};

@@ -1,4 +1,4 @@
-// src/config/index.js
+﻿// src/config/index.js
 // 角色枚举（保留原有，无修改）
 export const ROLE = {
     ADMIN: 1,        // 管理员
@@ -90,45 +90,80 @@ export const PAGE_PATH = {
     ABOUT_ADOPT: '/pages/about-adopt/index'
 };
 
-// 新增：接口路径（统一管理后端接口地址，便于后续替换）
+// API基础配置
+export const API_BASE_URL = 'https://api.your-domain.com'
+
+// API路径配置
 export const API_PATH = {
+    // 猫咪相关
+    CAT_LIST: `${API_BASE_URL}/cats`,
+    CAT_DETAIL: `${API_BASE_URL}/cats/`,
+
+    // 领养相关
+    ADOPT_SUBMIT: `${API_BASE_URL}/adoptions`,
+    ADOPT_LIST: `${API_BASE_URL}/adoptions`,
+
+    // 救助相关
+    RESCUE_PUBLISH: `${API_BASE_URL}/rescues`,
+    RESCUE_LIST: `${API_BASE_URL}/rescues`,
+
+    // 动态相关
+    DYNAMIC_LIST: `${API_BASE_URL}/dynamics`,
+    DYNAMIC_PUBLISH: `${API_BASE_URL}/dynamics`,
+
+    // 反馈相关
+    FEEDBACK_SUBMIT: `${API_BASE_URL}/feedbacks`,
+    FEEDBACK_LIST: `${API_BASE_URL}/feedbacks`,
+
+    // 志愿者相关
+    VOLUNTEER_SUBMIT: `${API_BASE_URL}/volunteers`,
+    VOLUNTEER_LIST: `${API_BASE_URL}/volunteers`,
+
     // 用户相关
-    USER_LOGIN: '/api/user/login',
-    USER_REGISTER: '/api/user/register',
-    USER_LIST: '/api/admin/user/list',
-    USER_DELETE: '/api/admin/user/delete',
+    USER_LOGIN: `${API_BASE_URL}/users/login`,
+    USER_REGISTER: `${API_BASE_URL}/users/register`,
+    USER_INFO: `${API_BASE_URL}/users/info`
+}
+
+// ✅ 修改为云函数名配置（不再使用HTTP URL）
+export const CLOUD_FUNCTION = {
+    // 用户相关
+    LOGIN: 'login',
+    REGISTER: 'register',
+    GET_USER_LIST: 'getUserList',
+    DELETE_USER: 'deleteUser',
 
     // 猫猫档案
-    CAT_LIST: '/api/cat/list',
-    CAT_ADD: '/api/cat/add',
-    CAT_EDIT: '/api/cat/edit',
+    GET_CAT_LIST: 'getCatList',
+    ADD_CAT: 'addCat',
+    EDIT_CAT: 'editCat',
 
     // 领养申请
-    ADOPT_SUBMIT: '/api/adopt/submit',
-    ADOPT_LIST: '/api/adopt/list',
-    ADOPT_AUDIT: '/api/adopt/audit',
+    SUBMIT_ADOPT: 'submitAdoption',
+    GET_ADOPT_LIST: 'getAdoptionList',
+    AUDIT_ADOPT: 'auditAdoption',
 
     // 救助信息
-    RESCUE_LIST: '/api/rescue/list',
-    RESCUE_PUBLISH: '/api/rescue/publish',
-    RESCUE_AUDIT: '/api/rescue/audit',
+    GET_RESCUE_LIST: 'getRescueList',
+    PUBLISH_RESCUE: 'publishRescue',
+    AUDIT_RESCUE: 'auditRescue',
 
     // 动态
-    DYNAMIC_LIST: '/api/dynamic/list',
-    DYNAMIC_PUBLISH: '/api/dynamic/publish',
+    GET_DYNAMIC_LIST: 'getDynamicList',
+    PUBLISH_DYNAMIC: 'publishDynamic',
 
     // 志愿者申请
-    VOLUNTEER_SUBMIT: '/api/volunteer/submit',
-    VOLUNTEER_LIST: '/api/volunteer/list',
-    VOLUNTEER_APPROVE: '/api/volunteer/approve',
-    VOLUNTEER_REJECT: '/api/volunteer/reject',
+    SUBMIT_VOLUNTEER: 'submitVolunteer',
+    GET_VOLUNTEER_LIST: 'getVolunteerList',
+    APPROVE_VOLUNTEER: 'approveVolunteer',
+    REJECT_VOLUNTEER: 'rejectVolunteer',
 
     // 当前用户信息
-    USER_CURRENT: '/api/user/current',
-    USER_UPDATE: '/api/user/update',
+    GET_CURRENT_USER: 'getCurrentUser',
+    UPDATE_USER_INFO: 'updateUserInfo',
 
     // 留言反馈
-    FEEDBACK_SUBMIT: '/api/feedback/submit',
-    FEEDBACK_LIST: '/api/feedback/list',
-    FEEDBACK_REPLY: '/api/feedback/reply'
+    SUBMIT_FEEDBACK: 'submitFeedback',
+    GET_FEEDBACK_LIST: 'getFeedbackList',
+    REPLY_FEEDBACK: 'replyFeedback'
 };

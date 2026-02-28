@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="adopt-submit-page">
     <nav-bar title="提交领养申请" showBack="{{true}}"></nav-bar>
     
@@ -61,10 +61,10 @@ export default class AdoptSubmit extends wepy.page {
     },
     async handleSubmit(e) {
       if (!this.selectedCat.id) {
-        return wepy.showToast({ title: '请选择领养猫咪', icon: 'none' })
+        return wepy.showToast({ title: '璇烽€夋嫨棰嗗吇鐚挭', icon: 'none' })
       }
       try {
-        wepy.showLoading({ title: '提交中...' })
+        wepy.showLoading({ title: '鎻愪氦涓?..' })
         const formData = {
           ...e.detail.value,
           catId: this.selectedCat.id,
@@ -72,11 +72,11 @@ export default class AdoptSubmit extends wepy.page {
         }
         await request({ url: API_PATH.ADOPT_SUBMIT, method: 'POST', data: formData })
         wepy.hideLoading()
-        wepy.showToast({ title: '申请提交成功', icon: 'success' })
+        wepy.showToast({ title: '鐢宠鎻愪氦鎴愬姛', icon: 'success' })
         setTimeout(() => { wepy.navigateBack() }, 1500)
       } catch (err) {
         wepy.hideLoading()
-        wepy.showToast({ title: '提交失败', icon: 'none' })
+        wepy.showToast({ title: '鎻愪氦澶辫触', icon: 'none' })
       }
     }
   }
@@ -130,3 +130,4 @@ export default class AdoptSubmit extends wepy.page {
   }
 }
 </style>
+

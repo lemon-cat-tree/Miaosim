@@ -1,0 +1,120 @@
+﻿<template>
+  <view class="comment-item">
+    <view class="comment-header">
+      <image class="avatar" src="{{ comment.user.avatar || '/static/images/default-avatar.png' }}" mode="aspectFill" />
+      <view class="info">
+        <view class="username">{{ comment.user.nickname || comment.user.username }}</view>
+        <view class="time">{{ formatTime(comment.createTime) }}</view>
+      </view>
+    </view>
+    <view class="comment-content">{{ comment.content }}</view>
+    <view class="comment-actions">
+      <view class="action" @tap="handleLike">
+        <text class="icon">👍</text>
+        <text>{{ comment.likes || 0 }}</text>
+      </view>
+      <view class="action" @tap="handleReply">
+        <text class="icon">💬</text>
+        <text>{{ comment.replies || 0 }}</text>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class CommentItem extends wepy.component {
+  props = {
+    comment: {
+      type: Object,
+      default: {}
+    }
+  }
+
+  methods = {
+    formatTime(timestamp) {
+      if (!timestamp) return ''
+      const date = new Date(timestamp)
+      const now = new Date()
+      const diff = now - date
+      const minutes = Math.floor(diff / 60000)
+      const hours = Math.floor(minutes / 60)
+      const days = Math.floor(hours / 24)
+      
+      if (minutes < 1) return '刚刚'
+      if (minutes < 60) return `${minutes}分钟前`
+      if (hours < 24) return `${hours}小时前`
+      if (days < 7) return `${days}天前`
+      return date.toLocaleDateString()
+    },
+    
+    handleLike() {
+      this.$emit('like', this.comment.id)
+    },
+    
+    handleReply() {
+      this.$emit('reply', this.comment.id)
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.comment-item {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+  
+  .comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16rpx;
+    
+    .avatar {
+      width: 60rpx;
+      height: 60rpx;
+      border-radius: 50%;
+      margin-right: 16rpx;
+    }
+    
+    .info {
+      flex: 1;
+      
+      .username {
+        font-size: 28rpx;
+        color: #333;
+        font-weight: bold;
+      }
+      
+      .time {
+        font-size: 24rpx;
+        color: #999;
+      }
+    }
+  }
+  
+  .comment-content {
+    font-size: 28rpx;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 16rpx;
+  }
+  
+  .comment-actions {
+    display: flex;
+    justify-content: flex-start;
+    
+    .action {
+      display: flex;
+      align-items: center;
+      margin-right: 30rpx;
+      font-size: 24rpx;
+      color: #999;
+      
+      .icon {
+        margin-right: 6rpx;
+      }
+    }
+  }
+}
+</style>

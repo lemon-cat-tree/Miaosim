@@ -1,24 +1,24 @@
-<style lang="less">
+﻿<style lang="less">
   .counter {
     text-align: left;
-    font-size: 28rpx; /* 修复：改用 rpx 适配小程序多设备 */
-    display: flex;    /* 新增：按钮横向排列，更符合小程序交互 */
+    font-size: 28rpx; /* 淇锛氭敼鐢?rpx 閫傞厤灏忕▼搴忓璁惧 */
+    display: flex;    /* 鏂板锛氭寜閽í鍚戞帓鍒楋紝鏇寸鍚堝皬绋嬪簭浜や簰 */
     align-items: center;
-    gap: 10rpx;       /* 新增：按钮间距 */
-    flex-wrap: wrap;  /* 新增：超出换行 */
+    gap: 10rpx;       /* 鏂板锛氭寜閽棿璺?*/
+    flex-wrap: wrap;  /* 鏂板锛氳秴鍑烘崲琛?*/
   }
   .count {
-    font-size: 32rpx; /* 修复：改用 rpx */
+    font-size: 32rpx; /* 淇锛氭敼鐢?rpx */
     font-weight: bold;
-    margin: 0 10rpx;  /* 新增：数字与按钮间距 */
+    margin: 0 10rpx;  /* 鏂板锛氭暟瀛椾笌鎸夐挳闂磋窛 */
     &.red {
-      color: #ff6b6b; /* 优化：业务风格红色 */
+      color: #ff6b6b; /* 浼樺寲锛氫笟鍔￠鏍肩孩鑹?*/
     }
     &.green {
-      color: #66CC99; /* 优化：业务风格绿色 */
+      color: #66CC99; /* 浼樺寲锛氫笟鍔￠鏍肩豢鑹?*/
     }
   }
-  /* 新增：按钮样式统一 */
+  /* 鏂板锛氭寜閽牱寮忕粺涓€ */
   .counter button {
     background: #f5f5f5;
     border: 1rpx solid #eee;
@@ -46,27 +46,24 @@
   import { asyncInc } from '../store/actions'
 
   @connect({
-    // 映射 redux state 到组件属性
-    stateNum (state) {
-      return state.counter && state.counter.num || 0 // 修复：使用逻辑运算符替代可选链
+    // 鏄犲皠 redux state 鍒扮粍浠跺睘鎬?    stateNum (state) {
+      return state.counter && state.counter.num || 0 // 淇锛氫娇鐢ㄩ€昏緫杩愮畻绗︽浛浠ｅ彲閫夐摼
     },
     asyncNum (state) {
-      return state.counter && state.counter.asyncNum || 0 // 修复：使用逻辑运算符替代可选链
+      return state.counter && state.counter.asyncNum || 0 // 淇锛氫娇鐢ㄩ€昏緫杩愮畻绗︽浛浠ｅ彲閫夐摼
     }
   }, {
-    // 映射 redux action 到组件方法
-    incNum: INCREMENT,
+    // 鏄犲皠 redux action 鍒扮粍浠舵柟娉?    incNum: INCREMENT,
     decNum: DECREMENT,
     asyncInc
   })
 
   export default class Counter extends wepy.component {
-    // 接收父组件传递的属性（支持双向绑定）
-    props = {
+    // 鎺ユ敹鐖剁粍浠朵紶閫掔殑灞炴€э紙鏀寔鍙屽悜缁戝畾锛?    props = {
       num: {
         type: [Number, String],
         coerce: function (v) {
-          return +v // 强制转为数字
+          return +v // 寮哄埗杞负鏁板瓧
         },
         default: 50
       }
@@ -74,31 +71,27 @@
 
     data = {}
 
-    // 移除无用的测试事件（index-broadcast 是旧测试逻辑）
-    events = {}
+    // 绉婚櫎鏃犵敤鐨勬祴璇曚簨浠讹紙index-broadcast 鏄棫娴嬭瘯閫昏緫锛?    events = {}
 
-    // 监听 num 变化，向父组件传递新值（核心：实现双向绑定）
+    // 鐩戝惉 num 鍙樺寲锛屽悜鐖剁粍浠朵紶閫掓柊鍊硷紙鏍稿績锛氬疄鐜板弻鍚戠粦瀹氾級
     watch = {
       num (curVal, oldVal) {
-        console.log(`计数器值变化：旧值=${oldVal}，新值=${curVal}`)
-        // 触发自定义事件，把新值传递给父组件
-        this.$emit('num-change', curVal)
+        console.log(`璁℃暟鍣ㄥ€煎彉鍖栵細鏃у€?${oldVal}锛屾柊鍊?${curVal}`)
+        // 瑙﹀彂鑷畾涔変簨浠讹紝鎶婃柊鍊间紶閫掔粰鐖剁粍浠?        this.$emit('num-change', curVal)
       }
     }
 
     methods = {
-      // 自增：修改 num 并触发事件
-      plus () {
+      // 鑷锛氫慨鏀?num 骞惰Е鍙戜簨浠?      plus () {
         this.num = this.num + 1
-        console.log('计数器自增：', this.num)
-        // 额外触发自定义事件（兼容旧逻辑）
-        this.$emit('index-emit', 1, 2, 3)
+        console.log('璁℃暟鍣ㄨ嚜澧烇細', this.num)
+        // 棰濆瑙﹀彂鑷畾涔変簨浠讹紙鍏煎鏃ч€昏緫锛?        this.$emit('index-emit', 1, 2, 3)
       },
-      // 自减：修改 num 并触发事件
-      minus () {
+      // 鑷噺锛氫慨鏀?num 骞惰Е鍙戜簨浠?      minus () {
         this.num = this.num - 1
-        console.log('计数器自减：', this.num)
+        console.log('璁℃暟鍣ㄨ嚜鍑忥細', this.num)
       }
     }
   }
 </script>
+

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="forget-password-container">
     <nav-bar title="忘记密码" showBack="{{true}}"></nav-bar>
     
@@ -8,7 +8,7 @@
         
         <view class="form-item">
           <view class="label">账号</view>
-          <input class="input" type="text" placeholder="请输入注册账号" bindinput="onUsernameInput" value="{{ username }}" />
+          <input class="input" type="text" placeholder="请输入注册账号? bindinput="onUsernameInput" value="{{ username }}" />
         </view>
         
         <view class="form-item">
@@ -30,7 +30,7 @@
           <input class="input" type="password" placeholder="请再次输入新密码" bindinput="onConfirmPasswordInput" value="{{ confirmPassword }}" />
         </view>
         
-        <button class="submit-btn" @tap="handleSubmit">重置密码</button>
+        <button class="submit-btn" @tap="handleSubmit">确认</button>
       </view>
     </view>
   </view>
@@ -72,20 +72,19 @@ export default class ForgetPassword extends wepy.page {
     
     async getCode() {
       if (!this.username) {
-        wx.showToast({ title: '请输入账号', icon: 'none' })
+        wx.showToast({ title: '璇疯緭鍏ヨ处鍙?, icon: 'none' })
         return
       }
       
       try {
-        // 这里应该调用发送验证码的API
-        // await sendCode({ username: this.username })
-        wx.showToast({ title: '验证码已发送', icon: 'success' })
+        
+        wx.showToast({ title: '楠岃瘉鐮佸凡鍙戦€?, icon: 'success' })
         
         this.codeSent = true
         this.countdown = 60
         this.startCountdown()
       } catch (err) {
-        wx.showToast({ title: '获取验证码失败', icon: 'none' })
+        wx.showToast({ title: '鑾峰彇楠岃瘉鐮佸け璐?, icon: 'none' })
       }
     },
     
@@ -104,33 +103,33 @@ export default class ForgetPassword extends wepy.page {
     
     async handleSubmit() {
       if (!this.username || !this.code || !this.password || !this.confirmPassword) {
-        wx.showToast({ title: '请填写所有字段', icon: 'none' })
+        wx.showToast({ title: '璇峰～鍐欐墍鏈夊瓧娈?, icon: 'none' })
         return
       }
       
       if (this.password !== this.confirmPassword) {
-        wx.showToast({ title: '两次输入的密码不一致', icon: 'none' })
+        wx.showToast({ title: '涓ゆ杈撳叆鐨勫瘑鐮佷笉涓€鑷?, icon: 'none' })
         return
       }
       
-      // 密码格式验证（至少6位）
+      // 瀵嗙爜鏍煎紡楠岃瘉锛堣嚦灏?浣嶏級
       if (this.password.length < 6) {
-        wx.showToast({ title: '密码长度不能少于6位', icon: 'none' })
+        wx.showToast({ title: '瀵嗙爜闀垮害涓嶈兘灏戜簬6浣?, icon: 'none' })
         return
       }
       
       try {
-        wx.showLoading({ title: '重置中...' })
-        // 这里应该调用重置密码的API
+        wx.showLoading({ title: '閲嶇疆涓?..' })
+        // 杩欓噷搴旇璋冪敤閲嶇疆瀵嗙爜鐨凙PI
         // await resetPassword({ username: this.username, code: this.code, password: this.password })
         wx.hideLoading()
-        wx.showToast({ title: '密码重置成功', icon: 'success' })
+        wx.showToast({ title: '瀵嗙爜閲嶇疆鎴愬姛', icon: 'success' })
         setTimeout(() => {
           wepy.redirectTo({ url: '/pages/load/login/index' })
         }, 1500)
       } catch (err) {
         wx.hideLoading()
-        wx.showToast({ title: '重置密码失败', icon: 'none' })
+        wx.showToast({ title: '閲嶇疆瀵嗙爜澶辫触', icon: 'none' })
       }
     }
   }
@@ -214,3 +213,4 @@ export default class ForgetPassword extends wepy.page {
   }
 }
 </style>
+

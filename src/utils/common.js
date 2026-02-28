@@ -1,4 +1,4 @@
-// 邮箱格式验证（注册页核心依赖）
+﻿// 邮箱格式验证（注册页核心依赖）
 export const validateEmail = (email) => {
     const reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
     return reg.test(email);

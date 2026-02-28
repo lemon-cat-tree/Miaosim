@@ -1,4 +1,4 @@
-import { handleActions } from 'redux-actions'
+﻿import { handleActions } from 'redux-actions'
 import { SET_USER, CLEAR_USER, UPDATE_USER_INFO } from '../types/user'
 
 const initialState = {

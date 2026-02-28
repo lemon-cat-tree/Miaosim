@@ -1,4 +1,4 @@
-<style lang="less">
+﻿<style lang="less">
 .home-container {
   padding: 20rpx;
 }
@@ -35,7 +35,7 @@
 
 <template>
   <view class="home-container">
-    <view class="banner">轮播图区域</view>
+    <view class="banner">轮播图片区域</view>
 
     <!-- 根据角色动态显示菜单（这里用wx:if示例） -->
     <view class="menu-grid" wx:if="{{ userRole === 'admin' }}">
@@ -45,7 +45,7 @@
       </view>
       <view class="menu-item" @tap="goTo('/pages/cat-info/index')">
         <image src="/static/images/icons/cat.png"></image>
-        <text>猫猫档案</text>
+        <text>猫咪档案</text>
       </view>
       <view class="menu-item" @tap="goTo('/pages/adopt-apply/manage')">
         <image src="/static/images/icons/adopt.png"></image>
@@ -59,11 +59,11 @@
     </view>
 
     <view class="menu-grid" wx:elif="{{ userRole === 'member' }}">
-      <!-- 救助组织成员菜单 -->
+      <!-- 鏁戝姪缁勭粐鎴愬憳鑿滃崟 -->
     </view>
 
     <view class="menu-grid" wx:else>
-      <!-- 普通用户菜单 -->
+      <!-- 鏅€氱敤鎴疯彍鍗?-->
     </view>
   </view>
 </template>
@@ -85,3 +85,4 @@ export default class Home extends wepy.page {
   }
 }
 </script>
+

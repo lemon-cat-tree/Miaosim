@@ -1,4 +1,4 @@
-<style lang="less">
+﻿<style lang="less">
 .volunteer-submit-page {
   padding: 30rpx;
   background: #f8f8f8;
@@ -69,30 +69,30 @@
 <template>
   <view class="volunteer-submit-page">
     <view class="form-card">
-      <view class="form-title">志愿者申请</view>
+      <view class="form-title">蹇楁効鑰呯敵璇?/view>
       
       <view class="form-item">
-        <view class="label">姓名 <text class="required">*</text></view>
-        <input type="text" placeholder="请输入您的姓名" bindinput="onNameInput" value="{{ name }}" />
+        <view class="label">濮撳悕 <text class="required">*</text></view>
+        <input type="text" placeholder="璇疯緭鍏ユ偍鐨勫鍚? bindinput="onNameInput" value="{{ name }}" />
       </view>
       
       <view class="form-item">
-        <view class="label">联系电话 <text class="required">*</text></view>
-        <input type="number" placeholder="请输入您的联系电话" bindinput="onPhoneInput" value="{{ phone }}" />
+        <view class="label">鑱旂郴鐢佃瘽 <text class="required">*</text></view>
+        <input type="number" placeholder="璇疯緭鍏ユ偍鐨勮仈绯荤數璇? bindinput="onPhoneInput" value="{{ phone }}" />
       </view>
       
       <view class="form-item">
-        <view class="label">申请理由 <text class="required">*</text></view>
-        <textarea placeholder="请详细说明您申请成为志愿者的理由..." bindinput="onReasonInput" value="{{ reason }}"></textarea>
-        <view class="tips">建议描述您的爱心经历、可参与时间等</view>
+        <view class="label">鐢宠鐞嗙敱 <text class="required">*</text></view>
+        <textarea placeholder="璇疯缁嗚鏄庢偍鐢宠鎴愪负蹇楁効鑰呯殑鐞嗙敱..." bindinput="onReasonInput" value="{{ reason }}"></textarea>
+        <view class="tips">寤鸿鎻忚堪鎮ㄧ殑鐖卞績缁忓巻銆佸彲鍙備笌鏃堕棿绛?/view>
       </view>
       
       <view class="form-item">
-        <view class="label">可参与时间</view>
-        <input type="text" placeholder="如：周末、节假日等" bindinput="onTimeInput" value="{{ availableTime }}" />
+        <view class="label">鍙弬涓庢椂闂?/view>
+        <input type="text" placeholder="濡傦細鍛ㄦ湯銆佽妭鍋囨棩绛? bindinput="onTimeInput" value="{{ availableTime }}" />
       </view>
       
-      <view class="submit-btn" @tap="handleSubmit">提交申请</view>
+      <view class="submit-btn" @tap="handleSubmit">鎻愪氦鐢宠</view>
     </view>
   </view>
 </template>
@@ -132,21 +132,21 @@ export default class VolunteerSubmit extends wepy.page {
 
   async handleSubmit() {
     if (!this.name || !this.phone || !this.reason) {
-      wx.showToast({ title: '请填写必填项', icon: 'none' })
+      wx.showToast({ title: '璇峰～鍐欏繀濉」', icon: 'none' })
       return
     }
 
-    // 验证手机号格式
+    // 楠岃瘉鎵嬫満鍙锋牸寮?
     const phoneReg = /^1[3-9]\d{9}$/
     if (!phoneReg.test(this.phone)) {
-      wx.showToast({ title: '请输入正确的手机号', icon: 'none' })
+      wx.showToast({ title: '璇疯緭鍏ユ纭殑鎵嬫満鍙?, icon: 'none' })
       return
     }
 
     try {
-      wx.showLoading({ title: '提交中' })
+      wx.showLoading({ title: '鎻愪氦涓? })
       
-      // 这里应该调用实际的API提交申请
+      // 杩欓噷搴旇璋冪敤瀹為檯鐨凙PI鎻愪氦鐢宠
       // const res = await submitVolunteerApplication({
       //   name: this.name,
       //   phone: this.phone,
@@ -155,18 +155,19 @@ export default class VolunteerSubmit extends wepy.page {
       //   userId: this.userInfo.id
       // })
       
-      // 模拟提交成功
+      // 妯℃嫙鎻愪氦鎴愬姛
       setTimeout(() => {
         wx.hideLoading()
-        wx.showToast({ title: '提交成功', icon: 'success' })
+        wx.showToast({ title: '鎻愪氦鎴愬姛', icon: 'success' })
         setTimeout(() => {
           wx.navigateBack()
         }, 1500)
       }, 1000)
     } catch (err) {
       wx.hideLoading()
-      wx.showToast({ title: '提交失败', icon: 'none' })
+      wx.showToast({ title: '鎻愪氦澶辫触', icon: 'none' })
     }
   }
 }
 </script>
+

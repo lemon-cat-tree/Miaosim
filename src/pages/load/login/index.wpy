@@ -1,4 +1,4 @@
-<style lang="less">
+﻿<style lang="less">
 .login-container {
   padding: 60rpx 40rpx;
   background: #fff;

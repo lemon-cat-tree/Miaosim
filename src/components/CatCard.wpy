@@ -1,4 +1,4 @@
-<style lang="less">
+﻿<style lang="less">
 .card {
   background: #fff;
   border-radius: 16rpx;
@@ -30,8 +30,8 @@
     <image class="avatar" src="{{ cat.avatar || '/static/images/default-cat.png' }}" mode="aspectFill" />
     <view class="info">
       <view class="name">{{ cat.name }}</view>
-      <view class="desc">{{ cat.breed }} · {{ cat.gender === 'male' ? '男孩' : '女孩' }}</view>
-      <view class="desc">{{ cat.age }}岁 · {{ cat.color }}</view>
+      <view class="desc">{{ cat.breed }} 路 {{ cat.gender === 'male' ? '鐢峰' : '濂冲' }}</view>
+      <view class="desc">{{ cat.age }}宀?路 {{ cat.color }}</view>
     </view>
   </view>
 </template>
@@ -54,3 +54,4 @@ export default class CatCard extends wepy.component {
   }
 }
 </script>
+

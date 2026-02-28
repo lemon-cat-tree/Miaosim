@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="register-page">
     <!-- 顶部标题区 -->
     <view class="header">

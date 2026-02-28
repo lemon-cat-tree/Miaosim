@@ -1,6 +1,6 @@
-<style lang="less">
+﻿<style lang="less">
 .page-container {
-  padding-top: 88rpx; // 为固定导航栏留出空间
+  padding-top: 88rpx; // 涓哄浐瀹氬鑸爮鐣欏嚭绌洪棿
   min-height: 100vh;
   background-color: #f5f5f5;
 }
@@ -31,24 +31,24 @@
 </style>
 
 <template>
-  <!-- 基础导航栏 -->
+  <!-- 鍩虹瀵艰埅鏍?-->
   <nav-bar 
-    title="基础导航栏" 
+    title="鍩虹瀵艰埅鏍? 
     @back="onBack"
     @right-tap="onRightTap">
   </nav-bar>
   
-  <!-- 自定义右侧文字 -->
+  <!-- 鑷畾涔夊彸渚ф枃瀛?-->
   <nav-bar 
-    title="右侧文字" 
-    right-text="保存"
+    title="鍙充晶鏂囧瓧" 
+    right-text="淇濆瓨"
     @right-tap="onSave"
     class="fixed">
   </nav-bar>
   
-  <!-- 自定义图标 -->
+  <!-- 鑷畾涔夊浘鏍?-->
   <nav-bar 
-    title="自定义图标" 
+    title="鑷畾涔夊浘鏍? 
     back-icon="/images/back-icon.png"
     right-icon="search"
     @right-tap="onSearch"
@@ -58,22 +58,22 @@
   <view class="page-container">
     <view class="content">
       <view class="section">
-        <view class="section-title">导航栏组件说明</view>
+        <view class="section-title">瀵艰埅鏍忕粍浠惰鏄?/view>
         <view class="section-content">
-          这是一个通用的导航栏组件，支持：
-          • 自定义标题
-          • 返回按钮控制
-          • 右侧文字或图标
-          • 透明背景
-          • 固定定位
-          • 状态栏适配
+          杩欐槸涓€涓€氱敤鐨勫鑸爮缁勪欢锛屾敮鎸侊細
+          鈥?鑷畾涔夋爣棰?
+          鈥?杩斿洖鎸夐挳鎺у埗
+          鈥?鍙充晶鏂囧瓧鎴栧浘鏍?
+          鈥?閫忔槑鑳屾櫙
+          鈥?鍥哄畾瀹氫綅
+          鈥?鐘舵€佹爮閫傞厤
         </view>
       </view>
       
       <view class="section">
-        <view class="section-title">使用示例</view>
+        <view class="section-title">浣跨敤绀轰緥</view>
         <view class="section-content">
-          查看上方不同样式的导航栏示例
+          鏌ョ湅涓婃柟涓嶅悓鏍峰紡鐨勫鑸爮绀轰緥
         </view>
       </view>
     </view>
@@ -85,7 +85,7 @@ import wepy from 'wepy'
 
 export default class NavDemo extends wepy.page {
   config = {
-    navigationBarTitleText: '导航栏示例',
+    navigationBarTitleText: '瀵艰埅鏍忕ず渚?,
     usingComponents: {
       'nav-bar': '../../components/nav-bar/index'
     }
@@ -93,33 +93,34 @@ export default class NavDemo extends wepy.page {
 
   methods = {
     onBack() {
-      console.log('返回按钮被点击')
-      // 这里可以添加自定义返回逻辑
+      console.log('杩斿洖鎸夐挳琚偣鍑?)
+      // 杩欓噷鍙互娣诲姞鑷畾涔夎繑鍥為€昏緫
     },
     
     onRightTap() {
-      console.log('右侧区域被点击')
+      console.log('鍙充晶鍖哄煙琚偣鍑?)
       wx.showToast({
-        title: '右侧点击',
+        title: '鍙充晶鐐瑰嚮',
         icon: 'none'
       })
     },
     
     onSave() {
-      console.log('保存按钮被点击')
+      console.log('淇濆瓨鎸夐挳琚偣鍑?)
       wx.showToast({
-        title: '已保存',
+        title: '宸蹭繚瀛?,
         icon: 'success'
       })
     },
     
     onSearch() {
-      console.log('搜索按钮被点击')
+      console.log('鎼滅储鎸夐挳琚偣鍑?)
       wx.showToast({
-        title: '开始搜索',
+        title: '寮€濮嬫悳绱?,
         icon: 'none'
       })
     }
   }
 }
 </script>
+

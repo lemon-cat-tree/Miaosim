@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="rescue-publish-page">
     <nav-bar title="发布救助信息" showBack="{{true}}"></nav-bar>
     
@@ -40,14 +40,14 @@ export default class RescuePublish extends wepy.page {
   methods = {
     async chooseImage() {
       const res = await wx.chooseImage({ count: 3 - this.imgList.length })
-      // 模拟上传图片，实际替换为真实上传接口
+      // 妯℃嫙涓婁紶鍥剧墖锛屽疄闄呮浛鎹负鐪熷疄涓婁紶鎺ュ彛
       const tempFilePaths = res.tempFilePaths
       this.imgList = [...this.imgList, ...tempFilePaths]
       this.$apply()
     },
     async handleSubmit(e) {
       try {
-        wepy.showLoading({ title: '发布中...' })
+        wepy.showLoading({ title: '鍙戝竷涓?..' })
         const formData = {
           ...e.detail.value,
           images: this.imgList,
@@ -55,11 +55,11 @@ export default class RescuePublish extends wepy.page {
         }
         await request({ url: API_PATH.RESCUE_PUBLISH, method: 'POST', data: formData })
         wepy.hideLoading()
-        wepy.showToast({ title: '发布成功', icon: 'success' })
+        wepy.showToast({ title: '鍙戝竷鎴愬姛', icon: 'success' })
         setTimeout(() => { wepy.navigateBack() }, 1500)
       } catch (err) {
         wepy.hideLoading()
-        wepy.showToast({ title: '发布失败', icon: 'none' })
+        wepy.showToast({ title: '鍙戝竷澶辫触', icon: 'none' })
       }
     }
   }
@@ -124,3 +124,4 @@ export default class RescuePublish extends wepy.page {
   }
 }
 </style>
+

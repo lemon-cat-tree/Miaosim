@@ -1,0 +1,31 @@
+﻿<template>
+  <view class="dynamic-publish-page">
+    <nav-bar title="发布动态" showBack="{{true}}"></nav-bar>
+    
+    <view class="content">
+      <view class="form-card">
+        <view class="form-title">发布动态</view>
+        
+        <view class="form-item">
+          <view class="label">动态标题</view>
+          <input class="input" type="text" placeholder="请输入动态标题" bindinput="onTitleInput" value="{{ title }}" />
+        </view>
+        
+        <view class="form-item">
+          <view class="label">动态内容</view>
+          <textarea class="textarea" placeholder="分享您的救助故事、活动信息等" bindinput="onContentInput" value="{{ content }}" rows="6" />
+        </view>
+        
+        <view class="form-item">
+          <view class="label">图片上传</view>
+          <view class="upload-container">
+            <view class="upload-box" wx:for="{{ imgList }}" wx:key="index">
+              <image class="upload-img" src="{{ item }}" mode="aspectFill" />
+              <view class="remove-btn" @tap="removeImage(index)">×</view>
+            </view>
+            <view class="upload-btn" wx:if="{{ imgList.length < 5 }}" @tap="chooseImage">+ 添加图片</view>
+          </view>
+        </view>
+        
+        <view class="form-item">
+          <view class="label"

@@ -1,4 +1,4 @@
-<style lang="less">
+﻿<style lang="less">
 .volunteer-manage-page {
   padding: 30rpx;
   background: #f8f8f8;
@@ -128,19 +128,19 @@
 <template>
   <view class="volunteer-manage-page">
     <view class="manage-header">
-      <view class="title">志愿者申请管理</view>
+      <view class="title">蹇楁効鑰呯敵璇风鐞?/view>
       <view class="stats">
         <view class="stat-item">
           <view class="count">{{ pendingCount }}</view>
-          <view class="label">待处理</view>
+          <view class="label">寰呭鐞?/view>
         </view>
         <view class="stat-item">
           <view class="count">{{ approvedCount }}</view>
-          <view class="label">已通过</view>
+          <view class="label">宸查€氳繃</view>
         </view>
         <view class="stat-item">
           <view class="count">{{ rejectedCount }}</view>
-          <view class="label">已拒绝</view>
+          <view class="label">宸叉嫆缁?/view>
         </view>
       </view>
     </view>
@@ -161,8 +161,8 @@
         </view>
         
         <view class="action-buttons" wx:if="{{ item.status === 'pending' }}">
-          <view class="btn approve" @tap="handleApprove(item.id)">通过</view>
-          <view class="btn reject" @tap="handleReject(item.id)">拒绝</view>
+          <view class="btn approve" @tap="handleApprove(item.id)">閫氳繃</view>
+          <view class="btn reject" @tap="handleReject(item.id)">鎷掔粷</view>
         </view>
       </view>
     </view>
@@ -195,35 +195,35 @@ export default class VolunteerManage extends wepy.page {
 
   async loadApplications() {
     try {
-      // 这里应该调用实际的API获取志愿者申请列表
+      // 杩欓噷搴旇璋冪敤瀹為檯鐨凙PI鑾峰彇蹇楁効鑰呯敵璇峰垪琛?
       // const res = await getVolunteerApplications()
       // this.applicationList = res.data
       
-      // 模拟数据
+      // 妯℃嫙鏁版嵁
       this.applicationList = [
         {
           id: 1,
-          name: '张三',
+          name: '寮犱笁',
           avatar: '',
           applyTime: '2024-01-15 10:30',
-          reason: '我热爱小动物，希望能为流浪猫狗提供帮助，有充足的时间参与志愿活动。',
+          reason: '鎴戠儹鐖卞皬鍔ㄧ墿锛屽笇鏈涜兘涓烘祦娴尗鐙楁彁渚涘府鍔╋紝鏈夊厖瓒崇殑鏃堕棿鍙備笌蹇楁効娲诲姩銆?,
           status: 'pending',
-          statusText: '待处理'
+          statusText: '寰呭鐞?
         },
         {
           id: 2,
-          name: '李四',
+          name: '鏉庡洓',
           avatar: '',
           applyTime: '2024-01-14 15:20',
-          reason: '是一名大学生，周末时间充裕，愿意参与救助活动。',
+          reason: '鏄竴鍚嶅ぇ瀛︾敓锛屽懆鏈椂闂村厖瑁曪紝鎰挎剰鍙備笌鏁戝姪娲诲姩銆?,
           status: 'approved',
-          statusText: '已通过'
+          statusText: '宸查€氳繃'
         }
       ]
       
       this.calculateStats()
     } catch (err) {
-      wx.showToast({ title: '加载失败', icon: 'none' })
+      wx.showToast({ title: '鍔犺浇澶辫触', icon: 'none' })
     }
   }
 
@@ -235,40 +235,41 @@ export default class VolunteerManage extends wepy.page {
 
   async handleApprove(id) {
     try {
-      wx.showLoading({ title: '处理中' })
+      wx.showLoading({ title: '澶勭悊涓? })
       // await approveVolunteerApplication(id)
-      // 更新本地数据
+      // 鏇存柊鏈湴鏁版嵁
       const index = this.applicationList.findIndex(item => item.id === id)
       if (index !== -1) {
         this.applicationList[index].status = 'approved'
-        this.applicationList[index].statusText = '已通过'
+        this.applicationList[index].statusText = '宸查€氳繃'
       }
       this.calculateStats()
       wx.hideLoading()
-      wx.showToast({ title: '已通过', icon: 'success' })
+      wx.showToast({ title: '宸查€氳繃', icon: 'success' })
     } catch (err) {
       wx.hideLoading()
-      wx.showToast({ title: '操作失败', icon: 'none' })
+      wx.showToast({ title: '鎿嶄綔澶辫触', icon: 'none' })
     }
   }
 
   async handleReject(id) {
     try {
-      wx.showLoading({ title: '处理中' })
+      wx.showLoading({ title: '澶勭悊涓? })
       // await rejectVolunteerApplication(id)
-      // 更新本地数据
+      // 鏇存柊鏈湴鏁版嵁
       const index = this.applicationList.findIndex(item => item.id === id)
       if (index !== -1) {
         this.applicationList[index].status = 'rejected'
-        this.applicationList[index].statusText = '已拒绝'
+        this.applicationList[index].statusText = '宸叉嫆缁?
       }
       this.calculateStats()
       wx.hideLoading()
-      wx.showToast({ title: '已拒绝', icon: 'success' })
+      wx.showToast({ title: '宸叉嫆缁?, icon: 'success' })
     } catch (err) {
       wx.hideLoading()
-      wx.showToast({ title: '操作失败', icon: 'none' })
+      wx.showToast({ title: '鎿嶄綔澶辫触', icon: 'none' })
     }
   }
 }
 </script>
+

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <!-- 统一导航栏 -->
   <nav-bar title="页面标题" showBack="{{true}}"></nav-bar>
   
@@ -18,26 +18,27 @@ import { checkPermission } from '@/utils/auth'
 
 export default class PageName extends wepy.page {
   components = { NavBar }
-  data = { /* 页面数据 */ }
+  data = { /* 椤甸潰鏁版嵁 */ }
   
   onLoad() { 
-    // 权限校验
+    // 鏉冮檺鏍￠獙
     if (!checkPermission('/pages/xxx/xxx')) {
       wepy.navigateBack()
-      return wepy.showToast({ title: '暂无权限', icon: 'none' })
+      return wepy.showToast({ title: '鏆傛棤鏉冮檺', icon: 'none' })
     }
-    // 初始化数据
+    // 鍒濆鍖栨暟鎹?
   }
   
-  methods = { /* 交互方法 */ }
+  methods = { /* 浜や簰鏂规硶 */ }
 }
 </script>
 
 <style lang="less" scoped>
-/* 统一配色：主色 #FF9E7D，辅助色 #66CC99，警告色 #ff6b6b */
+/* 缁熶竴閰嶈壊锛氫富鑹?#FF9E7D锛岃緟鍔╄壊 #66CC99锛岃鍛婅壊 #ff6b6b */
 .page-container {
   min-height: 100vh;
   background: #f8f8f8;
   padding: 20rpx;
 }
 </style>
+
