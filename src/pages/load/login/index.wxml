@@ -1,0 +1,17 @@
+<view class="login-container">
+  <view class="logo">
+    <image wx:if="{{!showLogoPlaceholder}}" src="/static/images/logo.png" binderror="onImageError" />
+    <view wx:if="{{showLogoPlaceholder}}" class="logo-placeholder">L</view>
+  </view>
+  <view class="input-group">
+    <view class="label">账号</view>
+    <input type="text" placeholder="请输入账号" bindinput="onUsernameInput" />
+  </view>
+  <view class="input-group">
+    <view class="label">密码</view>
+    <input type="password" placeholder="请输入密码" bindinput="onPasswordInput" />
+  </view>
+  <view class="login-btn" bindtap="doLogin">登录</view>
+  <view class="register-link" bindtap="goToRegister">还没有账号？立即注册</view>
+  <view class="register-link" bindtap="goToForget">忘记密码？</view>
+</view>

@@ -5,6 +5,8 @@
     "es6": false,
     "postcss": false,
     "minified": false,
+    "ignoreDevUnusedFiles": false,
+    "ignoreUploadUnusedFiles": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -26,7 +28,7 @@
     "tabIndent": "insertSpaces",
     "tabSize": 2
   },
-  "srcMiniprogramRoot": "dist/",
+  "srcMiniprogramRoot": "src/",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
   "request合法域名": [
     "https://api.your-domain.com",

@@ -94,7 +94,7 @@ export default class Login extends wepy.page {
     onImageError() {
       this.showLogoPlaceholder = true;
       this.$apply();
-    }
+    },
     onPasswordInput(e) {
       this.password = e.detail.value
     },

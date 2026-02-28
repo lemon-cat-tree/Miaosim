@@ -1,0 +1,43 @@
+<view class="home-container">
+  <view class="banner">轮播图片区域</view>
+
+  <!-- 管理员菜单 -->
+  <view class="menu-grid" wx:if="{{userRole === 'admin'}}">
+    <view class="menu-item" data-url="/pages/cat-info/index" bindtap="goTo">
+      <image src="/static/images/icons/cat.png"></image>
+      <text>猫咪档案</text>
+    </view>
+    <view class="menu-item" data-url="/pages/adopt-apply/manage" bindtap="goTo">
+      <image src="/static/images/icons/adopt.png"></image>
+      <text>领养申请</text>
+    </view>
+    <view class="menu-item" data-url="/pages/rescue-info/publish" bindtap="goTo">
+      <image src="/static/images/icons/rescue.png"></image>
+      <text>发布救助</text>
+    </view>
+    <view class="menu-item" data-url="/pages/dynamic/publish" bindtap="goTo">
+      <image src="/static/images/icons/dynamic.png"></image>
+      <text>发布动态</text>
+    </view>
+  </view>
+
+  <!-- 普通用户菜单 -->
+  <view class="menu-grid" wx:else>
+    <view class="menu-item" data-url="/pages/cat-info/index" bindtap="goTo">
+      <image src="/static/images/icons/cat.png"></image>
+      <text>猫咪档案</text>
+    </view>
+    <view class="menu-item" data-url="/pages/dynamic/list" bindtap="goTo">
+      <image src="/static/images/icons/dynamic.png"></image>
+      <text>动态广场</text>
+    </view>
+    <view class="menu-item" data-url="/pages/rescue-info/list" bindtap="goTo">
+      <image src="/static/images/icons/rescue.png"></image>
+      <text>救助信息</text>
+    </view>
+    <view class="menu-item" data-url="/pages/adopt-apply/submit" bindtap="goTo">
+      <image src="/static/images/icons/adopt.png"></image>
+      <text>申请领养</text>
+    </view>
+  </view>
+</view>
