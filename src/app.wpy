@@ -1,11 +1,13 @@
 ﻿import wepy from 'wepy'
-// 娣诲姞浜戝紑鍙戝垵濮嬪寲
+
+// 初始化云开发
 if (wx.cloud) {
   wx.cloud.init({
     env: 'cloud1-6gvny8o5da9ae0e6', 
     traceUser: true
   })
 }
+
 export default class App extends wepy.app {
   config = {
     pages: [
@@ -30,7 +32,7 @@ export default class App extends wepy.app {
     ],
     window: {
       navigationBarBackgroundColor: '#ffffff',
-      navigationBarTitleText: '娴佹氮鍔ㄧ墿绠＄悊绯荤粺',
+      navigationBarTitleText: '流浪动物管理系统',
       navigationBarTextStyle: 'black',
       backgroundColor: '#f5f5f5'
     },
@@ -42,25 +44,25 @@ export default class App extends wepy.app {
       list: [
         {
           pagePath: 'pages/home/index',
-          text: '棣栭〉',
+          text: '首页',
           iconPath: 'static/images/home.png',
           selectedIconPath: 'static/images/home-active.png'
         },
         {
           pagePath: 'pages/cat-info/index',
-          text: '鐚尗妗ｆ',
+          text: '猫咪档案',
           iconPath: 'static/images/cat.png',
           selectedIconPath: 'static/images/cat-active.png'
         },
         {
           pagePath: 'pages/dynamic/list',
-          text: '鍔ㄦ€?,
-          iconPath: 'static/images/rescue.png',
-          selectedIconPath: 'static/images/rescue-active.png'
+          text: '动态',
+          iconPath: 'static/images/dynamic.png',
+          selectedIconPath: 'static/images/dynamic-active.png'
         },
         {
           pagePath: 'pages/mine/index',
-          text: '鎴戠殑',
+          text: '我的',
           iconPath: 'static/images/mine.png',
           selectedIconPath: 'static/images/mine-active.png'
         }
@@ -72,15 +74,17 @@ export default class App extends wepy.app {
   }
   onLaunch() {
     if (!wx.cloud) {
-      console.error('璇蜂娇鐢?2.2.3 鎴栦互涓婄殑鍩虹搴撲互浣跨敤浜戣兘鍔?)
+      console.error('请使用 2.2.3 或以上的基础库以使用云能力')
       return
     }
-    // 鍒濆鍖栦簯寮€鍙?
+    
+    // 初始化云开发
     wx.cloud.init({
-      env: 'cloud1-6gvny8o5da9ae0e6', // 鏇挎崲鎴愪綘鐨勭幆澧僆D
-      traceUser: true          // 寤鸿寮€鍚紝渚夸簬杩借釜鐢ㄦ埛
+      env: 'cloud1-6gvny8o5da9ae0e6',
+      traceUser: true
     })
-    // 灏忕▼搴忓惎鍔ㄦ椂鎵ц锛屼緥濡傛鏌ョ櫥褰曠姸鎬?
+    
+    // 小程序启动时执行，例如检查登录状态
     console.log('app launched')
   }
 }
