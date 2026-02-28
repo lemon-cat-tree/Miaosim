@@ -88,5 +88,3 @@ export default class App extends wepy.app {
     console.log('app launched')
   }
 }
-
-

@@ -37,8 +37,8 @@
 <script>
 import wepy from 'wepy'
 import NavBar from '@/components/nav-bar/index'
-import { request } from '@/utils/request'
-import { API_PATH } from '@/config/index'
+import { cloudRequest } from '@/utils/request'
+import { API_PATH, CLOUD_FUNCTION } from '@/config/index'
 
 export default class AdoptSubmit extends wepy.page {
   components = { NavBar }
@@ -51,8 +51,13 @@ export default class AdoptSubmit extends wepy.page {
 
   methods = {
     async getCatList() {
-      const res = await request({ url: API_PATH.CAT_LIST })
-      this.catList = res || []
+      try {
+        const res = await cloudRequest(CLOUD_FUNCTION.GET_CAT_LIST)
+        this.catList = res || []
+      } catch (err) {
+        console.error('获取猫咪列表失败:', err)
+        this.catList = []
+      }
       this.$apply()
     },
     handleCatChange(e) {
